@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CallMade
 import androidx.compose.material.icons.filled.CallReceived
 import androidx.compose.material.icons.filled.TrendingUp
@@ -49,6 +50,11 @@ fun MovementRow(
             Icons.Default.CallMade,
             Color(0xFFEF4444), // Red Rose
             Color(0xFFEF4444).copy(alpha = 0.12f)
+        )
+        "Cierre Mensual" -> Triple(
+            Icons.Default.CalendarToday,
+            Color(0xFF00BCD4), // Teal
+            Color(0xFF00BCD4).copy(alpha = 0.12f)
         )
         else -> Triple( // Rendimiento
             Icons.Default.TrendingUp,
@@ -107,11 +113,26 @@ fun MovementRow(
             }
         }
 
+        val displayAmount = if (movement.type == "Cierre Mensual") {
+            String.format(Locale.getDefault(), "$%,.2f", movement.amount)
+        } else {
+            val amountPrefix = if (movement.amount > 0) "+" else ""
+            String.format(Locale.getDefault(), "%s$%,.2f", amountPrefix, movement.amount)
+        }
+        
+        val amountColor = if (movement.type == "Cierre Mensual") {
+            Color.White
+        } else if (movement.amount > 0) {
+            Color(0xFF10B981)
+        } else {
+            Color(0xFFEF4444)
+        }
+
         Text(
-            text = String.format(Locale.getDefault(), "%s$%,.2f", amountPrefix, movement.amount),
+            text = displayAmount,
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
-            color = if (movement.amount > 0) Color(0xFF10B981) else Color(0xFFEF4444)
+            color = amountColor
         )
     }
 }

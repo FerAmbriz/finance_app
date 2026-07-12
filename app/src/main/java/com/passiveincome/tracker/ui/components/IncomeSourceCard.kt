@@ -2,16 +2,7 @@ package com.passiveincome.tracker.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -19,13 +10,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.TrendingUp
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +35,7 @@ fun IncomeSourceCard(
     modifier: Modifier = Modifier
 ) {
     val percentage = if (totalBalance > 0.0) {
-        (source.balance / totalBalance) * 100
+        (source.totalBalance / totalBalance) * 100
     } else {
         0.0
     }
@@ -101,6 +86,27 @@ fun IncomeSourceCard(
                             fontSize = 12.sp,
                             color = DarkTextSecondary
                         )
+                        
+                        // Tier Breakdown
+                        Text(
+                            text = String.format(Locale.getDefault(), "Tier 1: $%,.0f (%.1f%%)", source.balance1, source.rate1 * 100),
+                            fontSize = 10.sp,
+                            color = if (source.balance1 > 0) Color.White else DarkTextSecondary
+                        )
+                        if (source.hasTier2) {
+                            Text(
+                                text = String.format(Locale.getDefault(), "Tier 2: $%,.0f (%.1f%%)", source.balance2, source.rate2 * 100),
+                                fontSize = 10.sp,
+                                color = if (source.balance2 > 0) Color.White else DarkTextSecondary
+                            )
+                        }
+                        if (source.hasTier3) {
+                            Text(
+                                text = String.format(Locale.getDefault(), "Tier 3: $%,.0f (%.1f%%)", source.balance3, source.rate3 * 100),
+                                fontSize = 10.sp,
+                                color = if (source.balance3 > 0) Color.White else DarkTextSecondary
+                            )
+                        }
                     }
                 }
 
@@ -136,12 +142,12 @@ fun IncomeSourceCard(
             ) {
                 Column {
                     Text(
-                        text = "Monto",
+                        text = "Monto Total",
                         fontSize = 11.sp,
                         color = DarkTextSecondary
                     )
                     Text(
-                        text = String.format(Locale.getDefault(), "$%,.2f", source.balance),
+                        text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -151,7 +157,10 @@ fun IncomeSourceCard(
                 Column(
                     horizontalAlignment = Alignment.End
                 ) {
-                    val dailyYield = (source.balance * source.annualRate) / 365.0
+                    val dailyYield = (source.balance1 * source.rate1 + 
+                                     (if (source.hasTier2) source.balance2 * source.rate2 else 0.0) +
+                                     (if (source.hasTier3) source.balance3 * source.rate3 else 0.0)) / 365.0
+                    
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -159,25 +168,10 @@ fun IncomeSourceCard(
                             text = String.format(Locale.getDefault(), "$%,.2f", dailyYield),
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF10B981) // Emerald green
+                            color = Color(0xFF10B981)
                         )
                         Text(
                             text = " /día",
-                            fontSize = 11.sp,
-                            color = DarkTextSecondary
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = String.format(Locale.getDefault(), "%.2f%%", source.annualRate * 100),
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = sourceColor
-                        )
-                        Text(
-                            text = " anual",
                             fontSize = 11.sp,
                             color = DarkTextSecondary
                         )

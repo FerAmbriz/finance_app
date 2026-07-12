@@ -19,6 +19,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.PieChart
+import androidx.compose.material.icons.filled.TrendingUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -71,7 +76,7 @@ fun DashboardScreen(
     var sourceForEditDialog by remember { mutableStateOf<IncomeSource?>(null) }
 
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("Activos", "Historial")
+    val tabs = listOf("Activos", "Historial", "Proyección")
 
     Scaffold(
         topBar = {
@@ -141,7 +146,11 @@ fun DashboardScreen(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Icon(
-                                    imageVector = if (index == 0) Icons.Default.PieChart else Icons.Default.History,
+                                    imageVector = when (index) {
+                                        0 -> Icons.Default.PieChart
+                                        1 -> Icons.Default.History
+                                        else -> Icons.Default.TrendingUp
+                                    },
                                     contentDescription = null,
                                     modifier = Modifier.size(16.dp),
                                     tint = if (selectedTabIndex == index) Color.White else DarkTextSecondary
@@ -179,7 +188,11 @@ fun DashboardScreen(
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     DonutChart(sources = sources)
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    val totalDailyYield = sources.sumOf { (it.balance * it.annualRate) / 365.0 }
+                                    val totalDailyYield = sources.sumOf { 
+                                        (it.balance1 * it.rate1 + 
+                                         (if (it.hasTier2) it.balance2 * it.rate2 else 0.0) +
+                                         (if (it.hasTier3) it.balance3 * it.rate3 else 0.0)) / 365.0 
+                                    }
                                     Text(
                                         text = "Rendimiento Diario Estimado",
                                         fontSize = 12.sp,
@@ -218,7 +231,7 @@ fun DashboardScreen(
                                 }
                             }
                         } else {
-                            val totalBalance = sources.sumOf { it.balance }
+                            val totalBalance = sources.sumOf { it.totalBalance }
                             items(sources, key = { it.id }) { source ->
                                 IncomeSourceCard(
                                     source = source,
@@ -238,10 +251,58 @@ fun DashboardScreen(
                 }
                 1 -> {
                     // History
+                    val monthlyBalances by viewModel.allMonthlyBalances.collectAsState()
+                    val totalCurrent = sources.sumOf { it.totalBalance }
+                    
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
+                        item {
+                            // Monthly Summary Card in History
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 20.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(20.dp)
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column {
+                                        Text("Balance Total Actual", fontSize = 12.sp, color = DarkTextSecondary)
+                                        Text(
+                                            text = String.format(Locale.getDefault(), "$%,.2f", totalCurrent),
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White
+                                        )
+                                    }
+                                    
+                                    if (monthlyBalances.size >= 2) {
+                                        val lastMonth = monthlyBalances[1].totalBalance
+                                        val diff = totalCurrent - lastMonth
+                                        val percent = (diff / lastMonth) * 100
+                                        
+                                        Column(horizontalAlignment = Alignment.End) {
+                                            Text("Crecimiento vs Mes Anterior", fontSize = 10.sp, color = DarkTextSecondary)
+                                            Text(
+                                                text = String.format(Locale.getDefault(), "%s%.1f%%", if (diff >= 0) "+" else "", percent),
+                                                fontSize = 16.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = if (diff >= 0) Color(0xFF10B981) else Color(0xFFEF4444)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         if (movements.isEmpty()) {
                             item {
                                 Column(
@@ -270,6 +331,9 @@ fun DashboardScreen(
                             }
                         }
                     }
+                }
+                2 -> {
+                    ProjectionScreen(sources = sources)
                 }
             }
         }

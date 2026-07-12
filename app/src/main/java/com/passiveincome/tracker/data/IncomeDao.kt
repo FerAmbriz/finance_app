@@ -34,4 +34,10 @@ interface IncomeDao {
 
     @Query("DELETE FROM movements WHERE sourceId = :sourceId")
     suspend fun deleteMovementsForSource(sourceId: Int)
+
+    @Query("SELECT * FROM monthly_balances ORDER BY timestamp DESC")
+    fun getAllMonthlyBalances(): Flow<List<MonthlyBalance>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMonthlyBalance(balance: MonthlyBalance)
 }

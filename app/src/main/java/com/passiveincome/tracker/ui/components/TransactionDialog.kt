@@ -1,33 +1,12 @@
 package com.passiveincome.tracker.ui.components
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -53,7 +32,8 @@ fun TransactionDialog(
     var description by remember { mutableStateOf("") }
 
     val amount = amountStr.toDoubleOrNull() ?: 0.0
-    val isEnabled = amount > 0.0 && (selectedTab == 0 || source.balance >= amount)
+    // Simplified: check against total balance for withdrawals
+    val isEnabled = amount > 0.0 && (selectedTab == 0 || source.totalBalance >= amount)
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -75,7 +55,7 @@ fun TransactionDialog(
                 )
 
                 Text(
-                    text = "Registra un depósito o un retiro para la cuenta de ${source.name}.",
+                    text = "Registra un depósito o un retiro para la cuenta de ${source.name}. Afectará al Nivel 1.",
                     fontSize = 13.sp,
                     color = DarkTextSecondary
                 )
@@ -123,7 +103,7 @@ fun TransactionDialog(
                     )
                 )
 
-                if (selectedTab == 1 && amount > source.balance) {
+                if (selectedTab == 1 && amount > source.totalBalance) {
                     Text(
                         text = "Saldo insuficiente para realizar este retiro.",
                         color = Color.Red,

@@ -3,32 +3,11 @@ package com.passiveincome.tracker.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -49,16 +28,16 @@ fun AddYieldDialog(
     onDismiss: () -> Unit,
     onConfirm: (Double, Double, String) -> Unit // returns: (yieldAmount, rateApplied, description)
 ) {
-    var rateStr by remember { mutableStateOf(String.format(Locale.US, "%.2f", source.annualRate * 100)) }
+    var rateStr by remember { mutableStateOf(String.format(Locale.US, "%.2f", source.rate1 * 100)) }
     var period by remember { mutableStateOf("Mensual") }
     val periods = listOf("Mensual", "Anual", "Diario")
     var dropdownExpanded by remember { mutableStateOf(false) }
 
     val rate = (rateStr.toDoubleOrNull() ?: 0.0) / 100.0
     val yieldAmount = when (period) {
-        "Anual" -> source.balance * rate
-        "Mensual" -> source.balance * (rate / 12.0)
-        "Diario" -> source.balance * (rate / 365.0)
+        "Anual" -> source.totalBalance * rate
+        "Mensual" -> source.totalBalance * (rate / 12.0)
+        "Diario" -> source.totalBalance * (rate / 365.0)
         else -> 0.0
     }
 
@@ -82,7 +61,7 @@ fun AddYieldDialog(
                 )
 
                 Text(
-                    text = "Aplica rendimiento a la cuenta de ${source.name} con base en una tasa y período definibles.",
+                    text = "Aplica rendimiento al saldo total de ${source.name} con base en una tasa y período definibles.",
                     fontSize = 13.sp,
                     color = DarkTextSecondary
                 )
@@ -92,9 +71,9 @@ fun AddYieldDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Saldo Actual:", color = DarkTextSecondary, fontSize = 14.sp)
+                    Text(text = "Saldo Total Actual:", color = DarkTextSecondary, fontSize = 14.sp)
                     Text(
-                        text = String.format(Locale.getDefault(), "$%,.2f", source.balance),
+                        text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp

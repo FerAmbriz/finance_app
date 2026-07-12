@@ -6,6 +6,7 @@ class IncomeRepository(private val incomeDao: IncomeDao) {
 
     val allSources: Flow<List<IncomeSource>> = incomeDao.getAllSources()
     val allMovements: Flow<List<Movement>> = incomeDao.getAllMovements()
+    val allMonthlyBalances: Flow<List<MonthlyBalance>> = incomeDao.getAllMonthlyBalances()
 
     suspend fun getSourceById(id: Int): IncomeSource? {
         return incomeDao.getSourceById(id)
@@ -26,5 +27,9 @@ class IncomeRepository(private val incomeDao: IncomeDao) {
 
     suspend fun insertMovement(movement: Movement): Long {
         return incomeDao.insertMovement(movement)
+    }
+
+    suspend fun insertMonthlyBalance(balance: MonthlyBalance) {
+        incomeDao.insertMonthlyBalance(balance)
     }
 }

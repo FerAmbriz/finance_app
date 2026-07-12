@@ -27,7 +27,7 @@ fun DonutChart(
     modifier: Modifier = Modifier,
     thickness: Dp = 28.dp
 ) {
-    val total = sources.sumOf { it.balance }
+    val total = sources.sumOf { it.totalBalance }
 
     Box(
         modifier = modifier,
@@ -49,13 +49,14 @@ fun DonutChart(
             } else {
                 var startAngle = -90f // Start drawing from 12 o'clock
                 // Only draw gaps if there are multiple segments
-                val spaceAngle = if (sources.filter { it.balance > 0 }.size > 1) 4f else 0f
-                val totalGaps = spaceAngle * sources.filter { it.balance > 0 }.size
+                val activeSources = sources.filter { it.totalBalance > 0 }
+                val spaceAngle = if (activeSources.size > 1) 4f else 0f
+                val totalGaps = spaceAngle * activeSources.size
                 val availableSweepAngle = 360f - totalGaps
 
                 sources.forEach { source ->
-                    if (source.balance > 0) {
-                        val percentage = (source.balance / total).toFloat()
+                    if (source.totalBalance > 0) {
+                        val percentage = (source.totalBalance / total).toFloat()
                         val sweepAngle = percentage * availableSweepAngle
 
                         val color = try {

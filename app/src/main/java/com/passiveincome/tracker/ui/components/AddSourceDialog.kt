@@ -3,33 +3,16 @@ package com.passiveincome.tracker.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,8 +34,19 @@ fun AddSourceDialog(
 ) {
     var name by remember { mutableStateOf("") }
     var type by remember { mutableStateOf("SOFIPO") }
-    var balanceStr by remember { mutableStateOf("") }
-    var rateStr by remember { mutableStateOf("") }
+    
+    var balance1Str by remember { mutableStateOf("") }
+    var rate1Str by remember { mutableStateOf("") }
+    
+    var hasTier2 by remember { mutableStateOf(false) }
+    var balance2Str by remember { mutableStateOf("") }
+    var rate2Str by remember { mutableStateOf("") }
+    
+    var hasTier3 by remember { mutableStateOf(false) }
+    var balance3Str by remember { mutableStateOf("") }
+    var rate3Str by remember { mutableStateOf("") }
+
+    var selectedColorHex by remember { mutableStateOf(AccentColors.first()) }
 
     val types = listOf("SOFIPO", "Banco", "Cetes", "Otro")
     var dropdownExpanded by remember { mutableStateOf(false) }
@@ -66,7 +60,9 @@ fun AddSourceDialog(
                 .border(1.dp, BorderColor, RoundedCornerShape(20.dp))
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
@@ -76,10 +72,34 @@ fun AddSourceDialog(
                     color = Color.White
                 )
 
+                // Color Selection
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Color:", color = DarkTextSecondary, fontSize = 14.sp)
+                    AccentColors.forEach { colorHex ->
+                        val color = Color(android.graphics.Color.parseColor(colorHex))
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(color)
+                                .border(
+                                    width = if (selectedColorHex == colorHex) 2.dp else 0.dp,
+                                    color = Color.White,
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .clickable { selectedColorHex = colorHex }
+                        )
+                    }
+                }
+
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Nombre (ej. Kubo, Nu, Finsus)") },
+                    label = { Text("Nombre") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
@@ -91,6 +111,7 @@ fun AddSourceDialog(
                     )
                 )
 
+                // Type Dropdown
                 Box(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
                         value = type,
@@ -107,110 +128,111 @@ fun AddSourceDialog(
                             unfocusedLabelColor = DarkTextSecondary
                         ),
                         trailingIcon = {
-                            Text(
-                                text = "▼",
-                                modifier = Modifier.padding(end = 12.dp),
-                                color = DarkTextSecondary
-                            )
+                            Text(text = "▼", color = DarkTextSecondary, modifier = Modifier.padding(end = 12.dp))
                         }
                     )
-                    Box(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clickable { dropdownExpanded = true }
-                    )
-
+                    Box(modifier = Modifier.matchParentSize().clickable { dropdownExpanded = true })
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
                         modifier = Modifier.background(DarkSurface)
                     ) {
                         types.forEach { t ->
-                            DropdownMenuItem(
-                                text = { Text(t, color = Color.White) },
-                                onClick = {
-                                    type = t
-                                    dropdownExpanded = false
-                                }
-                            )
+                            DropdownMenuItem(text = { Text(t, color = Color.White) }, onClick = { type = t; dropdownExpanded = false })
                         }
                     }
                 }
 
+                // Tier 1
+                Text("Nivel 1 (Base)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
                 OutlinedTextField(
-                    value = balanceStr,
-                    onValueChange = { balanceStr = it },
-                    label = { Text("Monto Inicial ($)") },
+                    value = balance1Str,
+                    onValueChange = { balance1Str = it },
+                    label = { Text("Monto ($)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
-                        unfocusedLabelColor = DarkTextSecondary
-                    )
+                    modifier = Modifier.fillMaxWidth()
+                )
+                OutlinedTextField(
+                    value = rate1Str,
+                    onValueChange = { rate1Str = it },
+                    label = { Text("Tasa Anual (%)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
-                OutlinedTextField(
-                    value = rateStr,
-                    onValueChange = { rateStr = it },
-                    label = { Text("Tasa Anual de Rendimiento (%)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
-                        unfocusedLabelColor = DarkTextSecondary
+                // Tier 2
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(checked = hasTier2, onCheckedChange = { hasTier2 = it })
+                    Text("Añadir Nivel 2", color = Color.White, fontSize = 14.sp)
+                }
+                if (hasTier2) {
+                    OutlinedTextField(
+                        value = balance2Str,
+                        onValueChange = { balance2Str = it },
+                        label = { Text("Monto Nivel 2 ($)") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        modifier = Modifier.fillMaxWidth()
                     )
-                )
+                    OutlinedTextField(
+                        value = rate2Str,
+                        onValueChange = { rate2Str = it },
+                        label = { Text("Tasa Nivel 2 (%)") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    OutlinedButton(
-                        onClick = onDismiss,
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color.White
-                        ),
-                        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
-                    ) {
-                        Text("Cancelar", fontSize = 14.sp)
+                // Tier 3
+                if (hasTier2) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = hasTier3, onCheckedChange = { hasTier3 = it })
+                        Text("Añadir Nivel 3", color = Color.White, fontSize = 14.sp)
                     }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Button(
-                        onClick = {
-                            val balance = balanceStr.toDoubleOrNull() ?: 0.0
-                            val rate = (rateStr.toDoubleOrNull() ?: 0.0) / 100.0
-                            val randomColor = AccentColors[Random.nextInt(AccentColors.size)]
-                            if (name.isNotBlank()) {
-                                onConfirm(
-                                    IncomeSource(
-                                        name = name,
-                                        type = type,
-                                        balance = balance,
-                                        annualRate = rate,
-                                        colorHex = randomColor
-                                    )
-                                )
-                            }
-                        },
-                        shape = RoundedCornerShape(8.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF6366F1),
-                            contentColor = Color.White
+                    if (hasTier3) {
+                        OutlinedTextField(
+                            value = balance3Str,
+                            onValueChange = { balance3Str = it },
+                            label = { Text("Monto Nivel 3 ($)") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier.fillMaxWidth()
                         )
-                    ) {
-                        Text("Guardar", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        OutlinedTextField(
+                            value = rate3Str,
+                            onValueChange = { rate3Str = it },
+                            label = { Text("Tasa Nivel 3 (%)") },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    OutlinedButton(onClick = onDismiss) { Text("Cancelar") }
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Button(onClick = {
+                        if (name.isNotBlank()) {
+                            val b1 = balance1Str.toDoubleOrNull() ?: 0.0
+                            val b2 = if (hasTier2) (balance2Str.toDoubleOrNull() ?: 0.0) else 0.0
+                            val b3 = if (hasTier3) (balance3Str.toDoubleOrNull() ?: 0.0) else 0.0
+
+                            onConfirm(IncomeSource(
+                                name = name,
+                                type = type,
+                                colorHex = selectedColorHex,
+                                balance = b1 + b2 + b3,
+                                annualRate = (rate1Str.toDoubleOrNull() ?: 0.0) / 100.0,
+                                hasLimit = hasTier2,
+                                limitAmount = b1,
+                                hasSecondaryRate = hasTier2,
+                                secondaryRate = (rate2Str.toDoubleOrNull() ?: 0.0) / 100.0,
+                                hasTertiaryRate = hasTier3,
+                                limitAmount2 = b1 + b2,
+                                tertiaryRate = (rate3Str.toDoubleOrNull() ?: 0.0) / 100.0
+                            ))
+                        }
+                    }) { Text("Guardar") }
                 }
             }
         }
