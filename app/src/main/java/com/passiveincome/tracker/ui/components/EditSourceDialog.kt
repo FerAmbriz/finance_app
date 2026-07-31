@@ -26,7 +26,7 @@ import com.passiveincome.tracker.ui.theme.DarkSurface
 import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun EditSourceDialog(
     source: IncomeSource,
@@ -78,26 +78,28 @@ fun EditSourceDialog(
                 )
 
                 // Color Selection
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("Color:", color = DarkTextSecondary, fontSize = 14.sp)
-                    AccentColors.forEach { colorHex ->
-                        val color = Color(android.graphics.Color.parseColor(colorHex))
-                        Box(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(color)
-                                .border(
-                                    width = if (selectedColorHex == colorHex) 2.dp else 0.dp,
-                                    color = Color.White,
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .clickable { selectedColorHex = colorHex }
-                        )
+                    FlowRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        AccentColors.forEach { colorHex ->
+                            val color = Color(android.graphics.Color.parseColor(colorHex))
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(color)
+                                    .border(
+                                        width = if (selectedColorHex == colorHex) 2.dp else 0.dp,
+                                        color = Color.White,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .clickable { selectedColorHex = colorHex }
+                            )
+                        }
                     }
                 }
 

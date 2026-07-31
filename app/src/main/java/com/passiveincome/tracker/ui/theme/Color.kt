@@ -20,5 +20,13 @@ val AccentColors = listOf(
     "#EC4899", // Magenta/Pink
     "#8B5CF6", // Purple
     "#EF4444", // Rose Red
-    "#14B8A6"  // Teal
+    "#14B8A6", // Teal
+    "#F97316", // Orange
+    "#84CC16", // Lime
+    "#3B82F6", // Blue
+    "#64748B", // Slate
+    "#D946EF", // Fuchsia
+    "#0EA5E9", // Sky
+    "#FACC15", // Yellow
+    "#94A3B8"  // Blue Gray
 )

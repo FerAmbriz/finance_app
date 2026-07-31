@@ -177,6 +177,16 @@ fun IncomeSourceCard(
                         )
                     }
                     Text(
+                        text = String.format(Locale.getDefault(), "$%,.2f /mes", dailyYield * 30),
+                        fontSize = 11.sp,
+                        color = Color(0xFF10B981).copy(alpha = 0.9f)
+                    )
+                    Text(
+                        text = String.format(Locale.getDefault(), "$%,.2f /año", dailyYield * 365),
+                        fontSize = 11.sp,
+                        color = Color(0xFF10B981).copy(alpha = 0.9f)
+                    )
+                    Text(
                         text = String.format(Locale.getDefault(), "Ocupa %.1f%%", percentage),
                         fontSize = 11.sp,
                         color = DarkTextSecondary,

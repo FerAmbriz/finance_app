@@ -1,385 +1,132 @@
 package com.passiveincome.tracker.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.PieChart
-import androidx.compose.material.icons.filled.TrendingUp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import android.os.Build
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.components.AddSourceDialog
-import com.passiveincome.tracker.ui.components.AddYieldDialog
-import com.passiveincome.tracker.ui.components.DonutChart
-import com.passiveincome.tracker.ui.components.EditSourceDialog
-import com.passiveincome.tracker.ui.components.IncomeSourceCard
-import com.passiveincome.tracker.ui.components.MovementRow
-import com.passiveincome.tracker.ui.components.TransactionDialog
-import com.passiveincome.tracker.ui.theme.DarkBackground
+import com.passiveincome.tracker.ui.components.GrowingOrbStatus
+import com.passiveincome.tracker.ui.components.drawOrb
 import com.passiveincome.tracker.ui.theme.DarkTextSecondary
-import com.passiveincome.tracker.viewmodel.IncomeViewModel
-import java.util.Locale
+import kotlin.math.cos
+import kotlin.math.sin
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(
-    viewModel: IncomeViewModel,
-    modifier: Modifier = Modifier
+fun GrowingHero(
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    statusText: String = "Growing...",
+    height: Dp = 220.dp,
+    titleFontSize: TextUnit = 36.sp,
+    action: (@Composable () -> Unit)? = null
 ) {
-    val sources by viewModel.allSources.collectAsState()
-    val movements by viewModel.allMovements.collectAsState()
+    val infiniteTransition = rememberInfiniteTransition(label = "orbs")
 
-    var showAddSourceDialog by remember { mutableStateOf(false) }
-    var sourceForYieldDialog by remember { mutableStateOf<IncomeSource?>(null) }
-    var sourceForTransactionDialog by remember { mutableStateOf<IncomeSource?>(null) }
-    var sourceForEditDialog by remember { mutableStateOf<IncomeSource?>(null) }
+    val time by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = (Math.PI * 2f).toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(12000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "time"
+    )
 
-    var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("Activos", "Historial", "Proyección")
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        // --- 1. FONDO CON ORBES ANIMADAS ---
+        val canvasModifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Modifier.fillMaxSize().blur(32.dp)
+        } else {
+            Modifier.fillMaxSize()
+        }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "PasivTrack",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { showAddSourceDialog = true }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Añadir Activo",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = DarkBackground
-                )
+        Canvas(modifier = canvasModifier) {
+            val width = size.width
+            val heightPx = size.height
+
+            // Orbe 1 - Emerald / Verde
+            drawOrb(
+                center = Offset(
+                    width * 0.2f + 60f * sin(time),
+                    heightPx * 0.4f + 40f * cos(time * 0.8f)
+                ),
+                radius = (heightPx * 0.8f) + 30f * sin(time * 1.2f),
+                color = Color(0xFF10B981).copy(alpha = 0.3f)
             )
-        },
-        floatingActionButton = {
-            if (selectedTabIndex == 0) {
-                FloatingActionButton(
-                    onClick = { showAddSourceDialog = true },
-                    containerColor = Color(0xFF6366F1),
-                    contentColor = Color.White,
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir Activo")
-                }
-            }
-        },
-        containerColor = DarkBackground,
-        modifier = modifier.fillMaxSize()
-    ) { paddingValues ->
+
+            // Orbe 2 - Cían
+            drawOrb(
+                center = Offset(
+                    width * 0.7f + 50f * cos(time * 0.7f),
+                    heightPx * 0.6f + 50f * sin(time * 1.5f)
+                ),
+                radius = (heightPx * 1.0f) + 40f * cos(time),
+                color = Color(0xFF06B6D4).copy(alpha = 0.25f)
+            )
+
+            // Orbe 3 - Indigo
+            drawOrb(
+                center = Offset(
+                    width * 0.5f + 120f * sin(time * 0.5f),
+                    heightPx * 0.3f + 30f * cos(time * 1.1f)
+                ),
+                radius = (heightPx * 0.7f) + 25f * sin(time),
+                color = Color(0xFF6366F1).copy(alpha = 0.2f)
+            )
+        }
+
+        // --- 2. CONTENIDO DEL HERO ---
         Column(
             modifier = Modifier
-                .padding(paddingValues)
                 .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Tab Selector
-            TabRow(
-                selectedTabIndex = selectedTabIndex,
-                containerColor = DarkBackground,
-                contentColor = Color.White,
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                        color = Color(0xFF6366F1)
-                    )
-                },
-                divider = {}
+            // Cápsula "Growing..." arriba
+            GrowingOrbStatus(text = statusText)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    imageVector = when (index) {
-                                        0 -> Icons.Default.PieChart
-                                        1 -> Icons.Default.History
-                                        else -> Icons.Default.TrendingUp
-                                    },
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = if (selectedTabIndex == index) Color.White else DarkTextSecondary
-                                )
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text(
-                                    text = title,
-                                    fontSize = 14.sp,
-                                    fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (selectedTabIndex == index) Color.White else DarkTextSecondary
-                                )
-                            }
-                        }
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        fontSize = titleFontSize,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White,
+                        letterSpacing = (-0.5).sp,
+                        lineHeight = (titleFontSize.value * 1.1).sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = subtitle,
+                        fontSize = 14.sp,
+                        color = DarkTextSecondary.copy(alpha = 0.8f),
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = 0.2.sp
                     )
                 }
+                action?.invoke()
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            when (selectedTabIndex) {
-                0 -> {
-                    // Summary and Source List
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 16.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    DonutChart(sources = sources)
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    val totalDailyYield = sources.sumOf { 
-                                        (it.balance1 * it.rate1 + 
-                                         (if (it.hasTier2) it.balance2 * it.rate2 else 0.0) +
-                                         (if (it.hasTier3) it.balance3 * it.rate3 else 0.0)) / 365.0 
-                                    }
-                                    Text(
-                                        text = "Rendimiento Diario Estimado",
-                                        fontSize = 12.sp,
-                                        color = DarkTextSecondary
-                                    )
-                                    Text(
-                                        text = String.format(Locale.getDefault(), "$%,.2f", totalDailyYield),
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF10B981)
-                                    )
-                                }
-                            }
-                        }
-
-                        if (sources.isEmpty()) {
-                            item {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 64.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = "Aún no tienes activos agregados",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        color = Color.White
-                                    )
-                                    Text(
-                                        text = "Pulsa + para añadir una SOFIPO o cuenta bancaria.",
-                                        fontSize = 12.sp,
-                                        color = DarkTextSecondary,
-                                        modifier = Modifier.padding(top = 4.dp)
-                                    )
-                                }
-                            }
-                        } else {
-                            val totalBalance = sources.sumOf { it.totalBalance }
-                            items(sources, key = { it.id }) { source ->
-                                IncomeSourceCard(
-                                    source = source,
-                                    totalBalance = totalBalance,
-                                    onAddYieldClick = { sourceForYieldDialog = source },
-                                    onTransactClick = { sourceForTransactionDialog = source },
-                                    onDeleteClick = { viewModel.deleteSource(source) },
-                                    onEditClick = { sourceForEditDialog = source }
-                                )
-                            }
-                        }
-
-                        item {
-                            Spacer(modifier = Modifier.height(72.dp))
-                        }
-                    }
-                }
-                1 -> {
-                    // History
-                    val monthlyBalances by viewModel.allMonthlyBalances.collectAsState()
-                    val totalCurrent = sources.sumOf { it.totalBalance }
-                    
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp)
-                    ) {
-                        item {
-                            // Monthly Summary Card in History
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 20.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
-                                shape = RoundedCornerShape(16.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .padding(20.dp)
-                                        .fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Column {
-                                        Text("Balance Total Actual", fontSize = 12.sp, color = DarkTextSecondary)
-                                        Text(
-                                            text = String.format(Locale.getDefault(), "$%,.2f", totalCurrent),
-                                            fontSize = 20.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                    }
-                                    
-                                    if (monthlyBalances.size >= 2) {
-                                        val lastMonth = monthlyBalances[1].totalBalance
-                                        val diff = totalCurrent - lastMonth
-                                        val percent = (diff / lastMonth) * 100
-                                        
-                                        Column(horizontalAlignment = Alignment.End) {
-                                            Text("Crecimiento vs Mes Anterior", fontSize = 10.sp, color = DarkTextSecondary)
-                                            Text(
-                                                text = String.format(Locale.getDefault(), "%s%.1f%%", if (diff >= 0) "+" else "", percent),
-                                                fontSize = 16.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = if (diff >= 0) Color(0xFF10B981) else Color(0xFFEF4444)
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (movements.isEmpty()) {
-                            item {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 64.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = "Sin movimientos registrados",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        color = Color.White
-                                    )
-                                    Text(
-                                        text = "Los depósitos, retiros y rendimientos aparecerán aquí.",
-                                        fontSize = 12.sp,
-                                        color = DarkTextSecondary,
-                                        modifier = Modifier.padding(top = 4.dp)
-                                    )
-                                }
-                            }
-                        } else {
-                            items(movements, key = { it.id }) { movement ->
-                                MovementRow(movement = movement)
-                            }
-                        }
-                    }
-                }
-                2 -> {
-                    ProjectionScreen(sources = sources)
-                }
-            }
-        }
-
-        // Dialogs management
-        if (showAddSourceDialog) {
-            AddSourceDialog(
-                onDismiss = { showAddSourceDialog = false },
-                onConfirm = { newSource ->
-                    viewModel.insertSource(newSource)
-                    showAddSourceDialog = false
-                }
-            )
-        }
-
-        sourceForYieldDialog?.let { source ->
-            AddYieldDialog(
-                source = source,
-                onDismiss = { sourceForYieldDialog = null },
-                onConfirm = { yieldAmount, rateApplied, description ->
-                    viewModel.addYield(source, yieldAmount, rateApplied, description)
-                    sourceForYieldDialog = null
-                }
-            )
-        }
-
-        sourceForTransactionDialog?.let { source ->
-            TransactionDialog(
-                source = source,
-                onDismiss = { sourceForTransactionDialog = null },
-                onConfirm = { amount, type, description ->
-                    viewModel.transact(source, amount, type, description)
-                    sourceForTransactionDialog = null
-                }
-            )
-        }
-
-        sourceForEditDialog?.let { source ->
-            EditSourceDialog(
-                source = source,
-                onDismiss = { sourceForEditDialog = null },
-                onConfirm = { updatedSource ->
-                    viewModel.updateSource(updatedSource)
-                    sourceForEditDialog = null
-                }
-            )
         }
     }
 }

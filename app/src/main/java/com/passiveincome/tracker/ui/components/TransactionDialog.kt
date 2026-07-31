@@ -1,6 +1,8 @@
 package com.passiveincome.tracker.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,18 +24,28 @@ import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 @Composable
 fun TransactionDialog(
     source: IncomeSource,
+    allSources: List<IncomeSource> = emptyList(),
     onDismiss: () -> Unit,
-    onConfirm: (Double, String, String) -> Unit // (amount, type, description)
+    onConfirm: (Double, String, String) -> Unit,
+    onTransfer: (IncomeSource, Double, String) -> Unit = { _, _, _ -> }
 ) {
-    var selectedTab by remember { mutableIntStateOf(0) } // 0 = Deposit, 1 = Withdrawal
-    val tabs = listOf("Depósito", "Retiro")
+    var selectedTab by remember { mutableIntStateOf(0) } // 0 = Deposit, 1 = Withdrawal, 2 = Transfer
+    val tabs = listOf("Depósito", "Retiro", "Transferencia")
 
     var amountStr by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    
+    var destinationSource by remember { mutableStateOf<IncomeSource?>(null) }
+    var destinationExpanded by remember { mutableStateOf(false) }
 
     val amount = amountStr.toDoubleOrNull() ?: 0.0
-    // Simplified: check against total balance for withdrawals
-    val isEnabled = amount > 0.0 && (selectedTab == 0 || source.totalBalance >= amount)
+    val isTransfer = selectedTab == 2
+    
+    val isEnabled = amount > 0.0 && (
+        selectedTab == 0 || 
+        (selectedTab == 1 && source.totalBalance >= amount) ||
+        (isTransfer && source.totalBalance >= amount && destinationSource != null)
+    )
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -55,7 +67,9 @@ fun TransactionDialog(
                 )
 
                 Text(
-                    text = "Registra un depósito o un retiro para la cuenta de ${source.name}. Afectará al Nivel 1.",
+                    text = if (isTransfer) 
+                        "Transfiere saldo de ${source.name} a otro activo." 
+                        else "Registra un depósito o un retiro para ${source.name}.",
                     fontSize = 13.sp,
                     color = DarkTextSecondary
                 )
@@ -79,11 +93,51 @@ fun TransactionDialog(
                             text = {
                                 Text(
                                     text = title,
+                                    fontSize = 12.sp,
                                     fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
                                     color = if (selectedTab == index) Color.White else DarkTextSecondary
                                 )
                             }
                         )
+                    }
+                }
+
+                if (isTransfer) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedTextField(
+                            value = destinationSource?.name ?: "Seleccionar destino",
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Activo Destino") },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = if (destinationSource == null) DarkTextSecondary else Color.White,
+                                focusedBorderColor = Color(0xFF6366F1),
+                                unfocusedBorderColor = BorderColor,
+                                focusedLabelColor = Color(0xFF6366F1),
+                                unfocusedLabelColor = DarkTextSecondary
+                            ),
+                            trailingIcon = {
+                                Text(text = "▼", color = DarkTextSecondary, modifier = Modifier.padding(end = 12.dp))
+                            }
+                        )
+                        Box(modifier = Modifier.matchParentSize().clickable { destinationExpanded = true })
+                        DropdownMenu(
+                            expanded = destinationExpanded,
+                            onDismissRequest = { destinationExpanded = false },
+                            modifier = Modifier.background(DarkSurface)
+                        ) {
+                            allSources.filter { it.id != source.id }.forEach { s ->
+                                DropdownMenuItem(
+                                    text = { Text(s.name, color = Color.White) }, 
+                                    onClick = { 
+                                        destinationSource = s
+                                        destinationExpanded = false 
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -103,9 +157,9 @@ fun TransactionDialog(
                     )
                 )
 
-                if (selectedTab == 1 && amount > source.totalBalance) {
+                if (selectedTab != 0 && amount > source.totalBalance) {
                     Text(
-                        text = "Saldo insuficiente para realizar este retiro.",
+                        text = "Saldo insuficiente en origen.",
                         color = Color.Red,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium
@@ -147,11 +201,15 @@ fun TransactionDialog(
                     Button(
                         onClick = {
                             if (isEnabled) {
-                                val type = tabs[selectedTab]
-                                val defaultDesc = if (type == "Depósito") "Depósito manual" else "Retiro manual"
-                                val finalDesc = description.ifBlank { defaultDesc }
-                                val finalAmount = if (type == "Depósito") amount else -amount
-                                onConfirm(finalAmount, type, finalDesc)
+                                if (isTransfer) {
+                                    onTransfer(destinationSource!!, amount, description.ifBlank { "Transferencia entre cuentas" })
+                                } else {
+                                    val type = tabs[selectedTab]
+                                    val defaultDesc = if (type == "Depósito") "Depósito manual" else "Retiro manual"
+                                    val finalDesc = description.ifBlank { defaultDesc }
+                                    val finalAmount = if (type == "Depósito") amount else -amount
+                                    onConfirm(finalAmount, type, finalDesc)
+                                }
                             }
                         },
                         shape = RoundedCornerShape(8.dp),

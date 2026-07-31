@@ -206,4 +206,32 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
     fun updateSource(source: IncomeSource) = viewModelScope.launch {
         repository.updateSource(source)
     }
+
+    fun transfer(from: IncomeSource, to: IncomeSource, amount: Double, description: String) = viewModelScope.launch {
+        // 1. Withdraw from source
+        val updatedFrom = from.copy(balance = from.balance - amount)
+        repository.updateSource(updatedFrom)
+        repository.insertMovement(
+            Movement(
+                sourceId = from.id,
+                sourceName = from.name,
+                amount = -amount,
+                type = "Transferencia",
+                description = "A ${to.name}: $description"
+            )
+        )
+        
+        // 2. Deposit to destination
+        val updatedTo = to.copy(balance = to.balance + amount)
+        repository.updateSource(updatedTo)
+        repository.insertMovement(
+            Movement(
+                sourceId = to.id,
+                sourceName = to.name,
+                amount = amount,
+                type = "Transferencia",
+                description = "De ${from.name}: $description"
+            )
+        )
+    }
 }
