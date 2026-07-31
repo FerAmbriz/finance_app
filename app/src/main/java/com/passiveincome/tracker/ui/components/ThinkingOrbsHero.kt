@@ -54,14 +54,14 @@ fun ThinkingOrbsHero(
             val width = size.width
             val heightPx = size.height
 
-            // Orb 1 - Indigo
+            // Orb 1 - Blue
             drawOrb(
                 center = Offset(
                     width * 0.2f + 60f * sin(time),
                     heightPx * 0.4f + 40f * cos(time * 0.8f)
                 ),
                 radius = (heightPx * 0.8f) + 30f * sin(time * 1.2f),
-                color = Color(0xFF6366F1).copy(alpha = 0.2f)
+                color = Color(0xFF3B82F6).copy(alpha = 0.2f)
             )
 
             // Orb 2 - Emerald
@@ -204,14 +204,14 @@ private fun MiniOrbCanvas(modifier: Modifier = Modifier) {
             color = Color(0xFF06B6D4).copy(alpha = 0.5f)
         )
 
-        // Orbe 3 - Púrpura / Índigo
+        // Orbe 3 - Púrpura / Azul
         drawOrb(
             center = Offset(
                 center.x + 5f * sin(time * 0.6f),
                 center.y + 5f * cos(time * 1.1f)
             ),
             radius = (width * 0.35f) + 3f * sin(time * 1.5f),
-            color = Color(0xFF6366F1).copy(alpha = 0.5f)
+            color = Color(0xFF3B82F6).copy(alpha = 0.5f)
         )
     }
 }

@@ -58,8 +58,8 @@ fun MovementRow(
         )
         else -> Triple( // Rendimiento
             Icons.Default.TrendingUp,
-            Color(0xFF8B5CF6), // Purple
-            Color(0xFF8B5CF6).copy(alpha = 0.12f)
+            Color(0xFF3B82F6), // Blue
+            Color(0xFF3B82F6).copy(alpha = 0.12f)
         )
     }
 

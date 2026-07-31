@@ -106,9 +106,9 @@ fun AddSourceDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -124,9 +124,9 @@ fun AddSourceDialog(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF6366F1),
+                            focusedBorderColor = Color(0xFF3B82F6),
                             unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF6366F1),
+                            focusedLabelColor = Color(0xFF3B82F6),
                             unfocusedLabelColor = DarkTextSecondary
                         ),
                         trailingIcon = {
@@ -146,7 +146,7 @@ fun AddSourceDialog(
                 }
 
                 // Tier 1
-                Text("Nivel 1 (Base)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF6366F1))
+                Text("Nivel 1 (Base)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF3B82F6))
                 OutlinedTextField(
                     value = balance1Str,
                     onValueChange = { balance1Str = it },

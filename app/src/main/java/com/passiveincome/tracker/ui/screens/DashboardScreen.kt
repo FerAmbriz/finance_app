@@ -102,7 +102,7 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                 ThinkingOrbsHero(
                     title = "Balance",
                     subtitle = "Patrimonio Total",
-                    statusText = String.format(Locale.getDefault(), "+$%,.2f diario", dailyYield),
+                    statusText = "v1 betta testing",
                     height = 200.dp,
                     titleFontSize = 36.sp,
                     action = {
@@ -135,23 +135,39 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             item {
-                                DonutChart(
-                                    sources = sources,
-                                    modifier = Modifier.fillMaxWidth().height(220.dp).padding(vertical = 8.dp)
-                                )
-                            }
-                            
-                            item {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .background(DarkSurface, RoundedCornerShape(16.dp))
-                                        .padding(16.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                        .padding(vertical = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
-                                    SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
-                                    SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
-                                    SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
+                                    // Donut Chart on the left
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        DonutChart(
+                                            sources = sources,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(200.dp)
+                                        )
+                                    }
+
+                                    // Summary Card on the right
+                                    Card(
+                                        modifier = Modifier.weight(1f),
+                                        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                                        shape = RoundedCornerShape(16.dp),
+                                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.1f))
+                                    ) {
+                                        Column(
+                                            modifier = Modifier.padding(16.dp),
+                                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                                        ) {
+                                            SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
+                                            SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
+                                            SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
+                                        }
+                                    }
                                 }
                             }
                             
@@ -261,7 +277,7 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                         label = { Text(label) },
                         leadingIcon = { Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp)) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF6366F1),
+                            selectedContainerColor = Color(0xFF3B82F6),
                             selectedLabelColor = Color.White,
                             containerColor = Color.Transparent,
                             labelColor = DarkTextSecondary

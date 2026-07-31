@@ -95,7 +95,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                         },
                         label = { Text(label, fontSize = 12.sp) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF6366F1),
+                            selectedContainerColor = Color(0xFF3B82F6),
                             selectedLabelColor = Color.White,
                             containerColor = DarkSurface,
                             labelColor = DarkTextSecondary
@@ -111,7 +111,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     onClick = { isCustomSelected = true },
                     label = { Text("Ps", fontSize = 12.sp) },
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFF6366F1),
+                        selectedContainerColor = Color(0xFF3B82F6),
                         selectedLabelColor = Color.White,
                         containerColor = DarkSurface,
                         labelColor = DarkTextSecondary
@@ -138,9 +138,9 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = DarkSurface,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     ),
                     shape = RoundedCornerShape(12.dp)
@@ -164,9 +164,9 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = DarkSurface,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )

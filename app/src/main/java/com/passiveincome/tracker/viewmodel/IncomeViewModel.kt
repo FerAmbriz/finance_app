@@ -74,7 +74,7 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
                         limitAmount = 20000.0,
                         hasSecondaryRate = true,
                         secondaryRate = 0.09,
-                        colorHex = "#8B5CF6"
+                        colorHex = "#3B82F6"
                     ))
                     insertSource(IncomeSource(
                         name = "Cetes Directo",

@@ -143,9 +143,9 @@ fun EditSourceDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -160,9 +160,9 @@ fun EditSourceDialog(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF6366F1),
+                            focusedBorderColor = Color(0xFF3B82F6),
                             unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF6366F1),
+                            focusedLabelColor = Color(0xFF3B82F6),
                             unfocusedLabelColor = DarkTextSecondary
                         ),
                         trailingIcon = {
@@ -205,9 +205,9 @@ fun EditSourceDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -221,9 +221,9 @@ fun EditSourceDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -236,7 +236,7 @@ fun EditSourceDialog(
                     Checkbox(
                         checked = hasLimit,
                         onCheckedChange = { hasLimit = it },
-                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF6366F1), uncheckedColor = DarkTextSecondary)
+                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
                     )
                     Text("Tiene Límite de Saldo", color = Color.White, fontSize = 14.sp)
                 }
@@ -251,9 +251,9 @@ fun EditSourceDialog(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF6366F1),
+                            focusedBorderColor = Color(0xFF3B82F6),
                             unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF6366F1),
+                            focusedLabelColor = Color(0xFF3B82F6),
                             unfocusedLabelColor = DarkTextSecondary
                         )
                     )
@@ -265,7 +265,7 @@ fun EditSourceDialog(
                         Checkbox(
                             checked = hasSecondaryRate,
                             onCheckedChange = { hasSecondaryRate = it },
-                            colors = CheckboxDefaults.colors(checkedColor = Color(0xFF6366F1), uncheckedColor = DarkTextSecondary)
+                            colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
                         )
                         Text("Aplicar Segunda Tasa (al excedente)", color = Color.White, fontSize = 14.sp)
                     }
@@ -280,9 +280,9 @@ fun EditSourceDialog(
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.White,
                                 unfocusedTextColor = Color.White,
-                                focusedBorderColor = Color(0xFF6366F1),
+                                focusedBorderColor = Color(0xFF3B82F6),
                                 unfocusedBorderColor = BorderColor,
-                                focusedLabelColor = Color(0xFF6366F1),
+                                focusedLabelColor = Color(0xFF3B82F6),
                                 unfocusedLabelColor = DarkTextSecondary
                             )
                         )
@@ -294,7 +294,7 @@ fun EditSourceDialog(
                             Checkbox(
                                 checked = hasTertiaryRate,
                                 onCheckedChange = { hasTertiaryRate = it },
-                                colors = CheckboxDefaults.colors(checkedColor = Color(0xFF6366F1), uncheckedColor = DarkTextSecondary)
+                                colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
                             )
                             Text("Añadir Tercer Nivel (Tier 3)", color = Color.White, fontSize = 14.sp)
                         }
@@ -309,9 +309,9 @@ fun EditSourceDialog(
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedTextColor = Color.White,
                                     unfocusedTextColor = Color.White,
-                                    focusedBorderColor = Color(0xFF6366F1),
+                                    focusedBorderColor = Color(0xFF3B82F6),
                                     unfocusedBorderColor = BorderColor,
-                                    focusedLabelColor = Color(0xFF6366F1),
+                                    focusedLabelColor = Color(0xFF3B82F6),
                                     unfocusedLabelColor = DarkTextSecondary
                                 )
                             )
@@ -324,9 +324,9 @@ fun EditSourceDialog(
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedTextColor = Color.White,
                                     unfocusedTextColor = Color.White,
-                                    focusedBorderColor = Color(0xFF6366F1),
+                                    focusedBorderColor = Color(0xFF3B82F6),
                                     unfocusedBorderColor = BorderColor,
-                                    focusedLabelColor = Color(0xFF6366F1),
+                                    focusedLabelColor = Color(0xFF3B82F6),
                                     unfocusedLabelColor = DarkTextSecondary
                                 )
                             )
@@ -341,7 +341,7 @@ fun EditSourceDialog(
                     Checkbox(
                         checked = hasHardCap,
                         onCheckedChange = { hasHardCap = it },
-                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF6366F1), uncheckedColor = DarkTextSecondary)
+                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
                     )
                     Text("Límite Total de Depósito", color = Color.White, fontSize = 14.sp)
                 }
@@ -356,9 +356,9 @@ fun EditSourceDialog(
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF6366F1),
+                            focusedBorderColor = Color(0xFF3B82F6),
                             unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF6366F1),
+                            focusedLabelColor = Color(0xFF3B82F6),
                             unfocusedLabelColor = DarkTextSecondary
                         )
                     )
@@ -414,7 +414,7 @@ fun EditSourceDialog(
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF6366F1),
+                            containerColor = Color(0xFF3B82F6),
                             contentColor = Color.White
                         )
                     ) {

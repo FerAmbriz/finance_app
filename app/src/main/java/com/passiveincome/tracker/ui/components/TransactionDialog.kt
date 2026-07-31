@@ -81,7 +81,7 @@ fun TransactionDialog(
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = Color(0xFF6366F1)
+                            color = Color(0xFF3B82F6)
                         )
                     },
                     divider = {}
@@ -113,9 +113,9 @@ fun TransactionDialog(
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = Color.White,
                                 unfocusedTextColor = if (destinationSource == null) DarkTextSecondary else Color.White,
-                                focusedBorderColor = Color(0xFF6366F1),
+                                focusedBorderColor = Color(0xFF3B82F6),
                                 unfocusedBorderColor = BorderColor,
-                                focusedLabelColor = Color(0xFF6366F1),
+                                focusedLabelColor = Color(0xFF3B82F6),
                                 unfocusedLabelColor = DarkTextSecondary
                             ),
                             trailingIcon = {
@@ -150,9 +150,9 @@ fun TransactionDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -174,9 +174,9 @@ fun TransactionDialog(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
                         unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF6366F1),
+                        focusedBorderColor = Color(0xFF3B82F6),
                         unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF6366F1),
+                        focusedLabelColor = Color(0xFF3B82F6),
                         unfocusedLabelColor = DarkTextSecondary
                     )
                 )
@@ -214,7 +214,7 @@ fun TransactionDialog(
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF6366F1),
+                            containerColor = Color(0xFF3B82F6),
                             contentColor = Color.White
                         ),
                         enabled = isEnabled
