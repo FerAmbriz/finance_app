@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -145,7 +146,7 @@ fun GrowingOrbStatus(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Mini contenedor con el efecto de orbes
+        // Mini contenedor con el efecto de orbes palpitante
         MiniOrbCanvas(modifier = Modifier.size(28.dp))
 
         // Texto "Growing..."
@@ -163,6 +164,7 @@ fun GrowingOrbStatus(
 private fun MiniOrbCanvas(modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "mini_orbs")
 
+    // Animación de tiempo para el movimiento de los orbes
     val time by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = (Math.PI * 2f).toFloat(),
@@ -173,25 +175,44 @@ private fun MiniOrbCanvas(modifier: Modifier = Modifier) {
         label = "time"
     )
 
-    val canvasModifier = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        modifier.blur(6.dp)
-    } else {
-        modifier
-    }
+    // Animación de pulsación (escala y opacidad)
+    val pulseScale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulse"
+    )
+
+    val canvasModifier = modifier
+        .graphicsLayer {
+            scaleX = pulseScale
+            scaleY = pulseScale
+        }
+        .clip(androidx.compose.foundation.shape.CircleShape) // Forzamos que sea circular
+        .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                it.blur(8.dp) // Aumentamos el blur para que se vea más etéreo
+            } else {
+                it
+            }
+        }
 
     Canvas(modifier = canvasModifier) {
         val width = size.width
         val heightPx = size.height
         val center = Offset(width / 2f, heightPx / 2f)
 
-        // Orbe 1 - Esmeralda / Verde (Ideal para "Growing")
+        // Orbe 1 - Esmeralda / Verde
         drawOrb(
             center = Offset(
                 center.x + 8f * sin(time),
                 center.y + 6f * cos(time * 0.9f)
             ),
             radius = (width * 0.45f) + 4f * sin(time * 1.3f),
-            color = Color(0xFF10B981).copy(alpha = 0.6f)
+            color = Color(0xFF10B981).copy(alpha = 0.7f)
         )
 
         // Orbe 2 - Cían
@@ -201,7 +222,7 @@ private fun MiniOrbCanvas(modifier: Modifier = Modifier) {
                 center.y + 7f * sin(time * 0.7f)
             ),
             radius = (width * 0.4f) + 3f * cos(time),
-            color = Color(0xFF06B6D4).copy(alpha = 0.5f)
+            color = Color(0xFF06B6D4).copy(alpha = 0.6f)
         )
 
         // Orbe 3 - Púrpura / Azul
@@ -211,7 +232,7 @@ private fun MiniOrbCanvas(modifier: Modifier = Modifier) {
                 center.y + 5f * cos(time * 1.1f)
             ),
             radius = (width * 0.35f) + 3f * sin(time * 1.5f),
-            color = Color(0xFF3B82F6).copy(alpha = 0.5f)
+            color = Color(0xFF3B82F6).copy(alpha = 0.6f)
         )
     }
 }

@@ -117,10 +117,12 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
             } else {
                 val heroTitle = if (currentView == "Projections") "Proyecciones" else "Actividad"
                 val heroSubtitle = if (currentView == "Projections") "Crecimiento estimado a futuro" else "Historial de movimientos"
+                val status = if (currentView == "Projections") "Future Engine" else "Live Activity"
                 
                 ThinkingOrbsHero(
                     title = heroTitle,
                     subtitle = heroSubtitle,
+                    statusText = status,
                     height = 200.dp,
                     titleFontSize = 36.sp
                 )
