@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -30,8 +29,6 @@ import com.passiveincome.tracker.data.IncomeSource
 import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
 import kotlin.math.sqrt
 
 fun String.toColorOrDefault(defaultColor: Color = Color.Gray): Color {
@@ -48,13 +45,12 @@ fun DonutChart(
     sources: List<IncomeSource>,
     modifier: Modifier = Modifier,
     thickness: Dp = 28.dp,
-    gapWidth: Dp = 4.dp // Ancho físico uniforme de la separación
+    gapWidth: Dp = 0.dp // 1. Cambiado a 0.dp para eliminar la separación
 ) {
     val total = remember(sources) { sources.sumOf { it.totalBalance } }
     var selectedSourceIndex by remember { mutableStateOf<Int?>(null) }
     val haptic = LocalHapticFeedback.current
 
-    // Animación de entrada
     val animationProgress = remember { Animatable(0f) }
     LaunchedEffect(sources) {
         animationProgress.snapTo(0f)
@@ -65,8 +61,6 @@ fun DonutChart(
     }
 
     val activeSources = remember(sources) { sources.filter { it.totalBalance > 0 } }
-    val numSections = activeSources.size
-
     val sourceColors = remember(activeSources) {
         activeSources.map { it.colorHex.toColorOrDefault() }
     }
@@ -89,7 +83,6 @@ fun DonutChart(
                         val dy = offset.y - center.y
                         val distance = sqrt(dx * dx + dy * dy)
 
-                        // Verificación de toque dentro del grosor de la dona
                         if (distance <= radius && distance >= radius - thickness.toPx() * 1.5f) {
                             var angle = Math.toDegrees(atan2(dy.toDouble(), dx.toDouble())).toFloat()
                             if (angle < 0) angle += 360f
@@ -139,7 +132,7 @@ fun DonutChart(
                 var currentStartAngle = -90f
                 val progress = animationProgress.value
 
-                // 1. DIBUJAR LOS ARCOS CONTINUOS (Sin gaps angulares que deformen la geometría)
+                // Dibujar arcos de color continuos
                 activeSources.forEachIndexed { i, source ->
                     val percentage = (source.totalBalance / total).toFloat()
                     val sweepAngle = percentage * 360f * progress
@@ -149,7 +142,7 @@ fun DonutChart(
 
                     val animatedThickness = if (isSelected) baseThicknessPx + 6.dp.toPx() else baseThicknessPx
 
-                    // Resplandor elegante al seleccionar
+                    // Resplandor al seleccionar
                     if (isSelected && sweepAngle > 0f) {
                         drawArc(
                             color = color.copy(alpha = 0.3f),
@@ -184,34 +177,8 @@ fun DonutChart(
                     currentStartAngle += sweepAngle
                 }
 
-                // 2. DIBUJAR CORTES RADIALES UNIFORMES
-                // Si hay más de un segmento, trazamos líneas divisoras con el ancho exacto deseado.
-                // Esto garantiza simetría perfecta entre el borde interno y externo.
-                if (numSections > 1 && progress > 0f) {
-                    var dividerAngle = -90f
-                    val gapPx = gapWidth.toPx()
-                    val dividerLength = outerRadius + 12.dp.toPx() // Sobresale ligeramente para limpiar bien los bordes
-
-                    activeSources.forEach { source ->
-                        val percentage = (source.totalBalance / total).toFloat()
-                        val sweepAngle = percentage * 360f * progress
-
-                        val rad = Math.toRadians(dividerAngle.toDouble())
-                        val endX = centerOffset.x + (dividerLength * cos(rad)).toFloat()
-                        val endY = centerOffset.y + (dividerLength * sin(rad)).toFloat()
-
-                        // Se dibuja la línea de corte limpia
-                        drawLine(
-                            color = Color.Black, // Cambia según el color de fondo del contenedor si no usas canal alfa transparente
-                            start = centerOffset,
-                            end = Offset(endX, endY),
-                            strokeWidth = gapPx,
-                            cap = StrokeCap.Butt
-                        )
-
-                        dividerAngle += sweepAngle
-                    }
-                }
+                // 2. Se eliminó la sección 'DIBUJAR CORTES RADIALES UNIFORMES'
+                // para que la dona quede completamente continua.
             }
         }
 
@@ -246,14 +213,14 @@ fun DonutChart(
             } else {
                 Text(
                     text = if (total > sources.sumOf { it.balance }) "TOTAL PROYECTADO" else "TOTAL ACTIVO",
-                    fontSize = 10.sp,
+                    fontSize = 8.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.sp,
                     color = DarkTextSecondary
                 )
                 Text(
                     text = String.format(Locale.getDefault(), "$%,.2f", total),
-                    fontSize = 20.sp,
+                    fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryTextColor
                 )
