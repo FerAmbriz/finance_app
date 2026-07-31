@@ -27,6 +27,7 @@ fun ThinkingOrbsHero(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
+    statusText: String? = null,
     height: androidx.compose.ui.unit.Dp = 200.dp,
     titleFontSize: androidx.compose.ui.unit.TextUnit = 40.sp,
     action: (@Composable () -> Unit)? = null
@@ -84,32 +85,43 @@ fun ThinkingOrbsHero(
             )
         }
 
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontSize = titleFontSize,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White,
-                    letterSpacing = if (titleFontSize > 30.sp) (-1.5).sp else (-0.5).sp,
-                    lineHeight = if (titleFontSize > 30.sp) (titleFontSize.value * 1.1).sp else titleFontSize
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = subtitle,
-                    fontSize = if (titleFontSize > 30.sp) 14.sp else 12.sp,
-                    color = com.passiveincome.tracker.ui.theme.DarkTextSecondary.copy(alpha = 0.8f),
-                    fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.2.sp
-                )
+            if (statusText != null) {
+                GrowingOrbStatus(text = statusText)
+            } else {
+                Spacer(modifier = Modifier.height(1.dp))
             }
-            action?.invoke()
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = title,
+                        fontSize = titleFontSize,
+                        fontWeight = FontWeight.Black,
+                        color = Color.White,
+                        letterSpacing = if (titleFontSize.value > 30f) (-1.5).sp else (-0.5).sp,
+                        lineHeight = if (titleFontSize.value > 30f) (titleFontSize.value * 1.1).sp else titleFontSize
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = subtitle,
+                        fontSize = if (titleFontSize.value > 30f) 14.sp else 12.sp,
+                        color = com.passiveincome.tracker.ui.theme.DarkTextSecondary.copy(alpha = 0.8f),
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = 0.2.sp
+                    )
+                }
+                action?.invoke()
+            }
         }
     }
 }
