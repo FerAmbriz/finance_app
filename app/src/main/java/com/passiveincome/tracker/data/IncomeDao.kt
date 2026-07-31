@@ -32,6 +32,9 @@ interface IncomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovement(movement: Movement): Long
 
+    @Delete
+    suspend fun deleteMovement(movement: Movement)
+
     @Query("DELETE FROM movements WHERE sourceId = :sourceId")
     suspend fun deleteMovementsForSource(sourceId: Int)
 

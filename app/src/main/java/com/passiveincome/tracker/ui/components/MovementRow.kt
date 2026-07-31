@@ -15,8 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CallMade
 import androidx.compose.material.icons.filled.CallReceived
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +37,7 @@ import java.util.Locale
 @Composable
 fun MovementRow(
     movement: Movement,
+    onDeleteClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val dateFormat = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
@@ -128,11 +131,30 @@ fun MovementRow(
             Color(0xFFEF4444)
         }
 
-        Text(
-            text = displayAmount,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold,
-            color = amountColor
-        )
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (onDeleteClick != null && movement.type != "Cierre Mensual") {
+                IconButton(
+                    onClick = onDeleteClick,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Borrar movimiento",
+                        tint = Color(0xFFEF4444),
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.size(4.dp))
+            }
+            Text(
+                text = displayAmount,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = amountColor
+            )
+        }
     }
 }

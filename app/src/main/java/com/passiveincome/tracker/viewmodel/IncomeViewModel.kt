@@ -203,6 +203,16 @@ class IncomeViewModel(application: Application) : AndroidViewModel(application) 
         repository.deleteSource(source)
     }
 
+    fun deleteMovement(movement: Movement) = viewModelScope.launch {
+        // Find the source and revert the balance
+        val source = repository.getSourceById(movement.sourceId)
+        if (source != null) {
+            val updatedSource = source.copy(balance = source.balance - movement.amount)
+            repository.updateSource(updatedSource)
+        }
+        repository.deleteMovement(movement)
+    }
+
     fun updateSource(source: IncomeSource) = viewModelScope.launch {
         repository.updateSource(source)
     }

@@ -163,6 +163,13 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                             modifier = Modifier.padding(16.dp),
                                             verticalArrangement = Arrangement.spacedBy(12.dp)
                                         ) {
+                                            Text(
+                                                "Rendimientos",
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White
+                                            )
+                                            Divider(color = Color.White.copy(alpha = 0.1f))
                                             SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
                                             SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
                                             SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
@@ -243,7 +250,10 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             }
 
                             items(movements) { movement ->
-                                MovementRow(movement = movement)
+                                MovementRow(
+                                    movement = movement,
+                                    onDeleteClick = { viewModel.deleteMovement(movement) }
+                                )
                             }
                             item { Spacer(modifier = Modifier.height(80.dp)) }
                         }

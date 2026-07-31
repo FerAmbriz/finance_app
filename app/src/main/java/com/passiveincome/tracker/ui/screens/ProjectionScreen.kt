@@ -370,6 +370,13 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+                        Text(
+                            "Rendimientos",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                        Divider(color = Color.White.copy(alpha = 0.1f))
                         SummaryItem("R. Diario", displayData.dailyYield, Color(0xFF10B981))
                         SummaryItem("R. Mensual", displayData.dailyYield * 30, Color(0xFF10B981))
                         SummaryItem("R. Anual", displayData.dailyYield * 365, Color(0xFF10B981))

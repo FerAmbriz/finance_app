@@ -29,6 +29,10 @@ class IncomeRepository(private val incomeDao: IncomeDao) {
         return incomeDao.insertMovement(movement)
     }
 
+    suspend fun deleteMovement(movement: Movement) {
+        incomeDao.deleteMovement(movement)
+    }
+
     suspend fun insertMonthlyBalance(balance: MonthlyBalance) {
         incomeDao.insertMonthlyBalance(balance)
     }
