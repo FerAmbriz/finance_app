@@ -31,7 +31,8 @@ import com.passiveincome.tracker.ui.theme.DarkBackground
 import com.passiveincome.tracker.ui.theme.DarkSurface
 import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import com.passiveincome.tracker.viewmodel.IncomeViewModel
-import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -55,6 +56,44 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
         val y3 = if (source.hasTier3) source.balance3 * (source.rate3 / 365.0) else 0.0
         y1 + y2 + y3
     }
+
+    val last3MonthsData = remember(movements) {
+        val cal = Calendar.getInstance()
+        val results = mutableListOf<Triple<String, Double, Double>>() // Month, Incomes, Expenses
+        
+        for (i in 0 until 3) {
+            val m = cal.get(Calendar.MONTH)
+            val y = cal.get(Calendar.YEAR)
+            val monthLabel = SimpleDateFormat("MMM", Locale.getDefault()).format(cal.time)
+            
+            val monthMovements = movements.filter {
+                val mCal = Calendar.getInstance().apply { timeInMillis = it.timestamp }
+                mCal.get(Calendar.MONTH) == m && mCal.get(Calendar.YEAR) == y
+            }
+            
+            val incomes = monthMovements.filter { it.amount > 0 && it.type != "Cierre Mensual" }.sumOf { it.amount }
+            val expenses = monthMovements.filter { it.amount < 0 && it.type != "Cierre Mensual" }.sumOf { kotlin.math.abs(it.amount) }
+            
+            results.add(Triple(monthLabel, incomes, expenses))
+            cal.add(Calendar.MONTH, -1)
+        }
+        results.reversed()
+    }
+
+    val currentMonthMovements = remember(movements) {
+        val cal = Calendar.getInstance()
+        val currentMonth = cal.get(Calendar.MONTH)
+        val currentYear = cal.get(Calendar.YEAR)
+        
+        movements.filter {
+            val mCal = Calendar.getInstance().apply { timeInMillis = it.timestamp }
+            mCal.get(Calendar.MONTH) == currentMonth && mCal.get(Calendar.YEAR) == currentYear
+        }
+    }
+
+    val monthlyEntradas = currentMonthMovements.filter { it.amount > 0 && it.type != "Cierre Mensual" }.sumOf { it.amount }
+    val monthlySalidas = currentMonthMovements.filter { it.amount < 0 && it.type != "Cierre Mensual" }.sumOf { kotlin.math.abs(it.amount) }
+    val netoMes = monthlyEntradas - monthlySalidas
 
     Box(modifier = Modifier.fillMaxSize().background(DarkBackground)) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -101,6 +140,20 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             }
                             
                             item {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(DarkSurface, RoundedCornerShape(16.dp))
+                                        .padding(16.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
+                                    SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
+                                    SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
+                                }
+                            }
+                            
+                            item {
                                 Text(
                                     "Tus Activos",
                                     fontSize = 18.sp,
@@ -133,6 +186,44 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             contentPadding = PaddingValues(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
+                            item {
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                        Text("Balance Total Actual", fontSize = 14.sp, color = DarkTextSecondary)
+                                        Text(
+                                            text = String.format(Locale.getDefault(), "$%,.2f", totalBalance),
+                                            fontSize = 24.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color.White
+                                        )
+                                        Divider(color = Color.White.copy(alpha = 0.1f))
+                                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                            SummaryItem("Entradas", monthlyEntradas, Color(0xFF10B981))
+                                            SummaryItem("Salidas", monthlySalidas, Color(0xFFEF4444))
+                                            SummaryItem("Neto Mes", netoMes, if (netoMes >= 0) Color(0xFF10B981) else Color(0xFFEF4444))
+                                        }
+                                    }
+                                }
+                            }
+
+                            item {
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    Column(modifier = Modifier.padding(16.dp)) {
+                                        Text("Ingresos vs Gastos (3 Meses)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        SimpleBarChart(data = last3MonthsData)
+                                    }
+                                }
+                            }
+
                             items(movements) { movement ->
                                 MovementRow(movement = movement)
                             }
@@ -327,6 +418,44 @@ fun GrowingHero(
                     )
                 }
                 action?.invoke()
+            }
+        }
+    }
+}
+
+@Composable
+fun SimpleBarChart(data: List<Triple<String, Double, Double>>) {
+    val maxVal = data.flatMap { listOf(it.second, it.third) }.maxOrNull()?.coerceAtLeast(1.0) ?: 1.0
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(120.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.Bottom
+    ) {
+        data.forEach { (month, income, expense) ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+                modifier = Modifier.weight(1f)
+            ) {
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .width(12.dp)
+                            .fillMaxHeight((income / maxVal).toFloat().coerceIn(0.01f, 1f))
+                            .background(Color(0xFF10B981), RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                    )
+                    Box(
+                        modifier = Modifier
+                            .width(12.dp)
+                            .fillMaxHeight((expense / maxVal).toFloat().coerceIn(0.01f, 1f))
+                            .background(Color(0xFFEF4444), RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(month, fontSize = 10.sp, color = DarkTextSecondary)
             }
         }
     }
