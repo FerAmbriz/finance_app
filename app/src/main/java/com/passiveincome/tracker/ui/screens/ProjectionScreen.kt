@@ -350,7 +350,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Donut Chart on the left
-                Box(modifier = Modifier.weight(1f)) {
+                Box(modifier = Modifier.weight(0.6f)) {
                     DonutChart(
                         sources = projectedSources,
                         modifier = Modifier
@@ -361,7 +361,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
 
                 // Summary Card on the right
                 Card(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(0.4f),
                     colors = CardDefaults.cardColors(containerColor = DarkSurface),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f))

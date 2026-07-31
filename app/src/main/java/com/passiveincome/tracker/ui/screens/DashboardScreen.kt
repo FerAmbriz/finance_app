@@ -145,7 +145,7 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                                 ) {
                                     // Donut Chart on the left
-                                    Box(modifier = Modifier.weight(1f)) {
+                                    Box(modifier = Modifier.weight(0.6f)) {
                                         DonutChart(
                                             sources = sources,
                                             modifier = Modifier
@@ -156,7 +156,7 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
 
                                     // Summary Card on the right
                                     Card(
-                                        modifier = Modifier.weight(1f),
+                                        modifier = Modifier.weight(0.4f),
                                         colors = CardDefaults.cardColors(containerColor = DarkSurface),
                                         shape = RoundedCornerShape(16.dp),
                                         border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.1f))
