@@ -23,6 +23,98 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
+fun ThinkingOrbsHero(
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    height: androidx.compose.ui.unit.Dp = 200.dp,
+    titleFontSize: androidx.compose.ui.unit.TextUnit = 40.sp,
+    action: (@Composable () -> Unit)? = null
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "orbs")
+
+    val time by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = (Math.PI * 2f).toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(12000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "time"
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val width = size.width
+            val heightPx = size.height
+
+            // Orb 1 - Indigo
+            drawOrb(
+                center = Offset(
+                    width * 0.2f + 60f * sin(time),
+                    heightPx * 0.4f + 40f * cos(time * 0.8f)
+                ),
+                radius = (heightPx * 0.8f) + 30f * sin(time * 1.2f),
+                color = Color(0xFF6366F1).copy(alpha = 0.2f)
+            )
+
+            // Orb 2 - Emerald
+            drawOrb(
+                center = Offset(
+                    width * 0.7f + 50f * cos(time * 0.7f),
+                    heightPx * 0.6f + 50f * sin(time * 1.5f)
+                ),
+                radius = (heightPx * 1.0f) + 40f * cos(time),
+                color = Color(0xFF10B981).copy(alpha = 0.15f)
+            )
+
+            // Orb 3 - Cyan
+            drawOrb(
+                center = Offset(
+                    width * 0.5f + 120f * sin(time * 0.5f),
+                    heightPx * 0.3f + 30f * cos(time * 1.1f)
+                ),
+                radius = (heightPx * 0.7f) + 25f * sin(time),
+                color = Color(0xFF06B6D4).copy(alpha = 0.15f)
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    fontSize = titleFontSize,
+                    fontWeight = FontWeight.Black,
+                    color = Color.White,
+                    letterSpacing = if (titleFontSize > 30.sp) (-1.5).sp else (-0.5).sp,
+                    lineHeight = if (titleFontSize > 30.sp) (titleFontSize.value * 1.1).sp else titleFontSize
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = subtitle,
+                    fontSize = if (titleFontSize > 30.sp) 14.sp else 12.sp,
+                    color = com.passiveincome.tracker.ui.theme.DarkTextSecondary.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.Medium,
+                    letterSpacing = 0.2.sp
+                )
+            }
+            action?.invoke()
+        }
+    }
+}
+
+@Composable
 fun GrowingOrbStatus(
     text: String = "Growing...",
     modifier: Modifier = Modifier
@@ -119,11 +211,7 @@ internal fun androidx.compose.ui.graphics.drawscope.DrawScope.drawOrb(
 ) {
     drawCircle(
         brush = Brush.radialGradient(
-            colorStops = arrayOf(
-                0.0f to color,
-                0.4f to color.copy(alpha = color.alpha * 0.5f),
-                1.0f to Color.Transparent
-            ),
+            colors = listOf(color, Color.Transparent),
             center = center,
             radius = radius
         ),

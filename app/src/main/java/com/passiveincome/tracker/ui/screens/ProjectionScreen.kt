@@ -448,6 +448,19 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
     }
 }
 
+@Composable
+fun SummaryItem(label: String, value: Double, color: Color) {
+    Column {
+        Text(label, fontSize = 11.sp, color = DarkTextSecondary)
+        Text(
+            text = String.format(Locale.getDefault(), "$%,.2f", value),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = color
+        )
+    }
+}
+
 data class DayProjection(
     val day: Int,
     val totalBalance: Double,
