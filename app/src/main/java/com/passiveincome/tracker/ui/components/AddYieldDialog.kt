@@ -16,9 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.theme.BorderColor
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,10 +41,10 @@ fun AddYieldDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = DarkSurface,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, BorderColor, RoundedCornerShape(20.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -57,13 +54,13 @@ fun AddYieldDialog(
                     text = "Añadir Rendimiento",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
                     text = "Aplica rendimiento al saldo total de ${source.name} con base en una tasa y período definibles.",
                     fontSize = 13.sp,
-                    color = DarkTextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 // Current balance info
@@ -71,10 +68,10 @@ fun AddYieldDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Saldo Total Actual:", color = DarkTextSecondary, fontSize = 14.sp)
+                    Text(text = "Saldo Total Actual:", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                     Text(
                         text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp
                     )
@@ -88,12 +85,12 @@ fun AddYieldDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -106,18 +103,18 @@ fun AddYieldDialog(
                         label = { Text("Período") },
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF3B82F6),
-                            unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF3B82F6),
-                            unfocusedLabelColor = DarkTextSecondary
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         trailingIcon = {
                             Text(
                                 text = "▼",
                                 modifier = Modifier.padding(end = 12.dp),
-                                color = DarkTextSecondary
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     )
@@ -130,11 +127,11 @@ fun AddYieldDialog(
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
-                        modifier = Modifier.background(DarkSurface)
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                     ) {
                         periods.forEach { p ->
                             DropdownMenuItem(
-                                text = { Text(p, color = Color.White) },
+                                text = { Text(p, color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     period = p
                                     dropdownExpanded = false
@@ -148,12 +145,12 @@ fun AddYieldDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF3B82F6).copy(alpha = 0.1f), RoundedCornerShape(8.dp))
-                        .border(1.dp, Color(0xFF3B82F6).copy(alpha = 0.2f), RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+                        .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), RoundedCornerShape(8.dp))
                         .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Rendimiento a sumar:", color = DarkTextSecondary, fontSize = 14.sp)
+                    Text(text = "Rendimiento a sumar:", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                     Text(
                         text = String.format(Locale.getDefault(), "+$%,.2f", yieldAmount),
                         color = Color(0xFF10B981),
@@ -172,7 +169,7 @@ fun AddYieldDialog(
                         onClick = onDismiss,
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         ),
                         border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
                     ) {

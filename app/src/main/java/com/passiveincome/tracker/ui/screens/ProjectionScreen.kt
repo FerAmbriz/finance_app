@@ -3,6 +3,7 @@ package com.passiveincome.tracker.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,10 +32,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import com.passiveincome.tracker.ui.components.DonutChart
-import com.passiveincome.tracker.ui.components.ThinkingOrbsHero
+import com.passiveincome.tracker.ui.components.MountainHero
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.pointer.pointerInput
@@ -72,8 +71,16 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
+        MountainHero(
+            title = "Proyecciones",
+            subtitle = "Crecimiento estimado a futuro",
+            statusText = "Future Engine",
+            height = 220.dp,
+            titleFontSize = 36.sp
+        )
 
         Column(
             modifier = Modifier.padding(16.dp),
@@ -95,13 +102,13 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                         },
                         label = { Text(label, fontSize = 12.sp) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF3B82F6),
-                            selectedLabelColor = Color.White,
-                            containerColor = DarkSurface,
-                            labelColor = DarkTextSecondary
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = Color.Transparent,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         border = FilterChipDefaults.filterChipBorder(
-                            borderColor = if (selectedDays == days && !isCustomSelected) Color.Transparent else Color(0xFF2E3D60)
+                            borderColor = if (selectedDays == days && !isCustomSelected) Color.Transparent else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
                         )
                     )
                 }
@@ -111,13 +118,13 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     onClick = { isCustomSelected = true },
                     label = { Text("Ps", fontSize = 12.sp) },
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = Color(0xFF3B82F6),
-                        selectedLabelColor = Color.White,
-                        containerColor = DarkSurface,
-                        labelColor = DarkTextSecondary
+                        selectedContainerColor = MaterialTheme.colorScheme.primary,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                        containerColor = Color.Transparent,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     border = FilterChipDefaults.filterChipBorder(
-                        borderColor = if (isCustomSelected) Color.Transparent else Color(0xFF2E3D60)
+                        borderColor = if (isCustomSelected) Color.Transparent else MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
                     )
                 )
             }
@@ -136,12 +143,12 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = DarkSurface,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -158,16 +165,16 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     label = { Text("Aporte Mensual", fontSize = 11.sp) },
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    prefix = { Text("$", color = DarkTextSecondary, fontSize = 12.sp) },
+                    prefix = { Text("$", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp) },
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = DarkSurface,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
                 OutlinedTextField(
@@ -176,16 +183,16 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     label = { Text("Meta Libertad", fontSize = 11.sp) },
                     modifier = Modifier.weight(1f),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    prefix = { Text("$", color = DarkTextSecondary, fontSize = 12.sp) },
+                    prefix = { Text("$", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp) },
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                         focusedBorderColor = Color(0xFF10B981),
-                        unfocusedBorderColor = DarkSurface,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                         focusedLabelColor = Color(0xFF10B981),
-                        unfocusedLabelColor = DarkTextSecondary
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
             }
@@ -196,16 +203,16 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                 label = { Text("Inflación Anual Estimada (%)", fontSize = 11.sp) },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                suffix = { Text("%", color = DarkTextSecondary, fontSize = 12.sp) },
+                suffix = { Text("%", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp) },
                 shape = RoundedCornerShape(12.dp),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                     focusedBorderColor = Color(0xFFF59E0B),
-                    unfocusedBorderColor = DarkSurface,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                     focusedLabelColor = Color(0xFFF59E0B),
-                    unfocusedLabelColor = DarkTextSecondary
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }
@@ -219,21 +226,22 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(DarkSurface, RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
                 .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Text("Total al final", fontSize = 12.sp, color = DarkTextSecondary)
+                Text("Total al final", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(
                     text = String.format(Locale.getDefault(), "$%,.2f", totalEnd),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text("Ganancia (Interés)", fontSize = 12.sp, color = DarkTextSecondary)
+                Text("Ganancia (Interés)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(
                     text = String.format(Locale.getDefault(), "+$%,.2f", profit),
                     fontSize = 18.sp,
@@ -273,7 +281,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                             "Meta de Libertad Financiera",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         val years = dayReached / 365
                         val remainingMonths = (dayReached % 365) / 30
@@ -287,7 +295,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                         Text(
                             "Alcanzarás tu meta en aprox. $reachText",
                             fontSize = 12.sp,
-                            color = DarkTextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -297,7 +305,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
             Text(
                 "Ingresa una meta mayor a tus ganancias actuales para calcular el tiempo.",
                 fontSize = 11.sp,
-                color = DarkTextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
@@ -306,14 +314,15 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(DarkSurface.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
                 .padding(12.dp)
         ) {
             Text(
                 "Evolución del Patrimonio (Ajustado)",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Box(modifier = Modifier.fillMaxWidth().height(260.dp)) {
@@ -334,7 +343,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                 if (isFinal) "Composición Final Proyectada" else "Composición en Día ${displayData.day}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 8.dp)
             )
             
@@ -362,9 +371,9 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                 // Summary Card on the right
                 Card(
                     modifier = Modifier.weight(0.4f),
-                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f))
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
@@ -374,9 +383,9 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                             "Rendimientos",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurface
                         )
-                        Divider(color = Color.White.copy(alpha = 0.1f))
+                        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                         SummaryItem("R. Diario", displayData.dailyYield, Color(0xFF10B981))
                         SummaryItem("R. Mensual", displayData.dailyYield * 30, Color(0xFF10B981))
                         SummaryItem("R. Anual", displayData.dailyYield * 365, Color(0xFF10B981))
@@ -391,7 +400,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                 "Hitos Mensuales",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 16.dp)
             )
             
@@ -402,16 +411,17 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(DarkSurface, RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
                     .padding(8.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Tiempo", fontSize = 12.sp, color = DarkTextSecondary, modifier = Modifier.weight(1f))
-                    Text("Total (Real)", fontSize = 12.sp, color = DarkTextSecondary, modifier = Modifier.weight(1.5f))
-                    Text("Rend. Diario", fontSize = 12.sp, color = DarkTextSecondary, modifier = Modifier.weight(1.5f))
+                    Text("Tiempo", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+                    Text("Total (Real)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.5f))
+                    Text("Rend. Diario", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1.5f))
                 }
                 
                 monthlyMilestones.take(12).forEach { milestone ->
@@ -424,11 +434,11 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                             milestone.day % 365 == 0 -> "${milestone.day / 365}A"
                             else -> "${milestone.day / 30}M"
                         }
-                        Text(timeText, fontSize = 13.sp, color = Color.White, modifier = Modifier.weight(1f))
+                        Text(timeText, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
                         Text(
                             String.format(Locale.getDefault(), "$%,.0f", milestone.totalBalance),
                             fontSize = 13.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1.5f)
                         )
                         Text(
@@ -443,7 +453,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     Text(
                         "... y ${monthlyMilestones.size - 12} hitos más",
                         fontSize = 11.sp,
-                        color = DarkTextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp)
                     )
                 }
@@ -458,7 +468,7 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
 @Composable
 fun SummaryItem(label: String, value: Double, color: Color) {
     Column {
-        Text(label, fontSize = 11.sp, color = DarkTextSecondary)
+        Text(label, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(
             text = String.format(Locale.getDefault(), "$%,.2f", value),
             fontSize = 16.sp,
@@ -618,12 +628,18 @@ fun ProjectionChart(
     }
     
     val labelStyle = TextStyle(
-        color = DarkTextSecondary.copy(alpha = 0.8f),
+        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
         fontSize = 10.sp,
         fontWeight = FontWeight.Medium
     )
 
     val primaryColor = Color(0xFF00BCD4) // Teal / Verde azulado
+
+    val gridColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+    val selectionLineColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+    val highlightColor = MaterialTheme.colorScheme.onSurface
+    val tooltipBgColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+    val tooltipTextColor = MaterialTheme.colorScheme.onSurface
 
     Canvas(
         modifier = modifier
@@ -682,7 +698,7 @@ fun ProjectionChart(
             
             // Grid line
             drawLine(
-                color = Color.White.copy(alpha = 0.08f),
+                color = gridColor,
                 start = Offset(paddingLeft, y),
                 end = Offset(paddingLeft + chartWidth, y),
                 strokeWidth = 1.dp.toPx()
@@ -774,7 +790,7 @@ fun ProjectionChart(
             
             // Vertical selection line
             drawLine(
-                color = Color.White.copy(alpha = 0.5f),
+                color = selectionLineColor,
                 start = Offset(x, paddingTop),
                 end = Offset(x, paddingTop + chartHeight),
                 strokeWidth = 1.dp.toPx()
@@ -782,7 +798,7 @@ fun ProjectionChart(
             
             // Highlight point
             drawCircle(
-                color = Color.White,
+                color = highlightColor,
                 radius = 6.dp.toPx(),
                 center = Offset(x, y)
             )
@@ -794,14 +810,14 @@ fun ProjectionChart(
             
             // Tooltip text
             val tooltipText = String.format(Locale.getDefault(), "Día %d: $%,.2f", dayData.day, dayData.totalBalance)
-            val tooltipStyle = labelStyle.copy(color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            val tooltipStyle = labelStyle.copy(color = tooltipTextColor, fontSize = 11.sp, fontWeight = FontWeight.Bold)
             val textResult = textMeasurer.measure(tooltipText, tooltipStyle)
             
             val tooltipX = (x + 8.dp.toPx()).coerceAtMost(width - textResult.size.width - 8.dp.toPx())
             val tooltipY = (y - textResult.size.height - 8.dp.toPx()).coerceAtLeast(paddingTop)
             
             drawRect(
-                color = Color(0xFF1E293B).copy(alpha = 0.9f),
+                color = tooltipBgColor,
                 topLeft = Offset(tooltipX - 4.dp.toPx(), tooltipY - 4.dp.toPx()),
                 size = Size(textResult.size.width + 8.dp.toPx(), textResult.size.height + 8.dp.toPx())
             )
@@ -819,7 +835,7 @@ fun ProjectionChart(
             val lastX = paddingLeft + chartWidth
             val lastY = paddingTop + chartHeight - ((projection.last().totalBalance.toFloat() - minVal.toFloat()) / range.toFloat() * chartHeight)
             drawCircle(
-                color = Color.White,
+                color = highlightColor,
                 radius = 5.dp.toPx(),
                 center = Offset(lastX, lastY)
             )

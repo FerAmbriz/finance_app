@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -136,10 +137,10 @@ fun GrowingOrbStatus(
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(50.dp))
-            .background(Color(0xFF121212).copy(alpha = 0.85f)) // Fondo oscuro semitransparente
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)) // Fondo adaptativo semitransparente
             .border(
                 width = 1.dp,
-                color = Color.White.copy(alpha = 0.08f),
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f),
                 shape = RoundedCornerShape(50.dp)
             )
             .padding(horizontal = 16.dp, vertical = 10.dp),
@@ -152,7 +153,7 @@ fun GrowingOrbStatus(
         // Texto "Growing..."
         Text(
             text = text,
-            color = Color(0xFFE2E8F0),
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp,
             fontWeight = FontWeight.Medium,
             letterSpacing = 0.3.sp

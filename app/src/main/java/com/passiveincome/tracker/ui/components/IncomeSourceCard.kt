@@ -20,8 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.theme.BorderColor
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 
 @Composable
@@ -49,9 +47,9 @@ fun IncomeSourceCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, BorderColor, RoundedCornerShape(16.dp)),
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(
-            containerColor = com.passiveincome.tracker.ui.theme.DarkSurface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -79,32 +77,32 @@ fun IncomeSourceCard(
                             text = source.name,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = source.type,
                             fontSize = 12.sp,
-                            color = DarkTextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         
                         // Tier Breakdown
                         Text(
                             text = String.format(Locale.getDefault(), "Tier 1: $%,.0f (%.1f%%)", source.balance1, source.rate1 * 100),
                             fontSize = 10.sp,
-                            color = if (source.balance1 > 0) Color.White else DarkTextSecondary
+                            color = if (source.balance1 > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (source.hasTier2) {
                             Text(
                                 text = String.format(Locale.getDefault(), "Tier 2: $%,.0f (%.1f%%)", source.balance2, source.rate2 * 100),
                                 fontSize = 10.sp,
-                                color = if (source.balance2 > 0) Color.White else DarkTextSecondary
+                                color = if (source.balance2 > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                         if (source.hasTier3) {
                             Text(
                                 text = String.format(Locale.getDefault(), "Tier 3: $%,.0f (%.1f%%)", source.balance3, source.rate3 * 100),
                                 fontSize = 10.sp,
-                                color = if (source.balance3 > 0) Color.White else DarkTextSecondary
+                                color = if (source.balance3 > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -117,7 +115,7 @@ fun IncomeSourceCard(
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar",
-                            tint = DarkTextSecondary,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -144,13 +142,13 @@ fun IncomeSourceCard(
                     Text(
                         text = "Monto Total",
                         fontSize = 11.sp,
-                        color = DarkTextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
 
@@ -173,7 +171,7 @@ fun IncomeSourceCard(
                         Text(
                             text = " /día",
                             fontSize = 11.sp,
-                            color = DarkTextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Text(
@@ -189,7 +187,7 @@ fun IncomeSourceCard(
                     Text(
                         text = String.format(Locale.getDefault(), "Ocupa %.1f%%", percentage),
                         fontSize = 11.sp,
-                        color = DarkTextSecondary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -206,7 +204,7 @@ fun IncomeSourceCard(
                     onClick = onTransactClick,
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color.White
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     shape = RoundedCornerShape(8.dp),
                     border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)

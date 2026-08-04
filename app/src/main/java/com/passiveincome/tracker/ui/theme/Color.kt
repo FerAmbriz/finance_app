@@ -12,6 +12,15 @@ val DarkTextPrimary = Color(0xFFF8FAFC) // White Slate
 val DarkTextSecondary = Color(0xFF94A3B8) // Muted Slate Blue
 val BorderColor = Color(0xFF2E3D60) // Subtle line separation
 
+// Light Theme Colors
+val LightBackground = Color(0xFFF1F5F9) // Soft Sky Gray
+val LightSurface = Color(0xFFFFFFFF) // Pure White
+val LightPrimary = Color(0xFF3B82F6) // Bright Blue
+val LightSecondary = Color(0xFF10B981) // Emerald Mint
+val LightTextPrimary = Color(0xFF0F172A) // Slate 900
+val LightTextSecondary = Color(0xFF64748B) // Slate 500
+val LightBorder = Color(0xFFE2E8F0) // Slate 200
+
 val AccentColors = listOf(
     "#3B82F6", // Blue
     "#10B981", // Emerald Mint

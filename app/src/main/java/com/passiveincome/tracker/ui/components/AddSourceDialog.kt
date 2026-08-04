@@ -21,9 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.passiveincome.tracker.data.IncomeSource
 import com.passiveincome.tracker.ui.theme.AccentColors
-import com.passiveincome.tracker.ui.theme.BorderColor
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -54,10 +51,10 @@ fun AddSourceDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = DarkSurface,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, BorderColor, RoundedCornerShape(20.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
         ) {
             Column(
                 modifier = Modifier
@@ -69,12 +66,12 @@ fun AddSourceDialog(
                     text = "Añadir Nuevo Activo",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 // Color Selection
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Color:", color = DarkTextSecondary, fontSize = 14.sp)
+                    Text("Color:", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -89,7 +86,7 @@ fun AddSourceDialog(
                                     .background(color)
                                     .border(
                                         width = if (selectedColorHex == colorHex) 2.dp else 0.dp,
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         shape = RoundedCornerShape(8.dp)
                                     )
                                     .clickable { selectedColorHex = colorHex }
@@ -104,12 +101,12 @@ fun AddSourceDialog(
                     label = { Text("Nombre") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -122,31 +119,31 @@ fun AddSourceDialog(
                         label = { Text("Tipo de Activo") },
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF3B82F6),
-                            unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF3B82F6),
-                            unfocusedLabelColor = DarkTextSecondary
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         trailingIcon = {
-                            Text(text = "▼", color = DarkTextSecondary, modifier = Modifier.padding(end = 12.dp))
+                            Text(text = "▼", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(end = 12.dp))
                         }
                     )
                     Box(modifier = Modifier.matchParentSize().clickable { dropdownExpanded = true })
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
-                        modifier = Modifier.background(DarkSurface)
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                     ) {
                         types.forEach { t ->
-                            DropdownMenuItem(text = { Text(t, color = Color.White) }, onClick = { type = t; dropdownExpanded = false })
+                            DropdownMenuItem(text = { Text(t, color = MaterialTheme.colorScheme.onSurface) }, onClick = { type = t; dropdownExpanded = false })
                         }
                     }
                 }
 
                 // Tier 1
-                Text("Nivel 1 (Base)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF3B82F6))
+                Text("Nivel 1 (Base)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 OutlinedTextField(
                     value = balance1Str,
                     onValueChange = { balance1Str = it },
@@ -165,7 +162,7 @@ fun AddSourceDialog(
                 // Tier 2
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = hasTier2, onCheckedChange = { hasTier2 = it })
-                    Text("Añadir Nivel 2", color = Color.White, fontSize = 14.sp)
+                    Text("Añadir Nivel 2", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                 }
                 if (hasTier2) {
                     OutlinedTextField(
@@ -188,7 +185,7 @@ fun AddSourceDialog(
                 if (hasTier2) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(checked = hasTier3, onCheckedChange = { hasTier3 = it })
-                        Text("Añadir Nivel 3", color = Color.White, fontSize = 14.sp)
+                        Text("Añadir Nivel 3", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                     }
                     if (hasTier3) {
                         OutlinedTextField(

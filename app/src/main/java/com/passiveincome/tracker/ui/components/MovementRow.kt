@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.passiveincome.tracker.data.Movement
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -101,17 +101,17 @@ fun MovementRow(
                     text = movement.sourceName,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = movement.description,
                     fontSize = 12.sp,
-                    color = DarkTextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = formattedDate,
                     fontSize = 10.sp,
-                    color = DarkTextSecondary.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
         }
@@ -124,7 +124,7 @@ fun MovementRow(
         }
         
         val amountColor = if (movement.type == "Cierre Mensual") {
-            Color.White
+            MaterialTheme.colorScheme.onSurface
         } else if (movement.amount > 0) {
             Color(0xFF10B981)
         } else {

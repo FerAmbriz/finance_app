@@ -27,9 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.passiveincome.tracker.data.IncomeSource
 import com.passiveincome.tracker.ui.components.*
-import com.passiveincome.tracker.ui.theme.DarkBackground
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import com.passiveincome.tracker.viewmodel.IncomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -95,20 +92,20 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
     val monthlySalidas = currentMonthMovements.filter { it.amount < 0 && it.type != "Cierre Mensual" }.sumOf { kotlin.math.abs(it.amount) }
     val netoMes = monthlyEntradas - monthlySalidas
 
-    Box(modifier = Modifier.fillMaxSize().background(DarkBackground)) {
+    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Column(modifier = Modifier.fillMaxSize()) {
             
             if (currentView == "Dashboard") {
-                ThinkingOrbsHero(
+                MountainHero(
                     title = "Balance",
                     subtitle = "Patrimonio Total",
-                    statusText = "v1 betta testing",
-                    height = 200.dp,
+                    statusText = "v1 beta testing",
+                    height = 240.dp,
                     titleFontSize = 36.sp,
                     action = {
                         IconButton(
                             onClick = { showAddDialog = true },
-                            modifier = Modifier.background(Color.White.copy(alpha = 0.1f), MaterialTheme.shapes.medium)
+                            modifier = Modifier.background(Color.White.copy(alpha = 0.2f), MaterialTheme.shapes.medium)
                         ) {
                             Icon(Icons.Default.Add, contentDescription = "Add Source", tint = Color.White)
                         }
@@ -119,11 +116,11 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                 val heroSubtitle = if (currentView == "Projections") "Crecimiento estimado a futuro" else "Historial de movimientos"
                 val status = if (currentView == "Projections") "Future Engine" else "Live Activity"
                 
-                ThinkingOrbsHero(
+                MountainHero(
                     title = heroTitle,
                     subtitle = heroSubtitle,
                     statusText = status,
-                    height = 200.dp,
+                    height = 240.dp,
                     titleFontSize = 36.sp
                 )
             }
@@ -157,9 +154,9 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                     // Summary Card on the right
                                     Card(
                                         modifier = Modifier.weight(0.4f),
-                                        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                                         shape = RoundedCornerShape(16.dp),
-                                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.1f))
+                                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(16.dp),
@@ -169,9 +166,9 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                                 "Rendimientos",
                                                 fontSize = 14.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color.White
+                                                color = MaterialTheme.colorScheme.onSurface
                                             )
-                                            Divider(color = Color.White.copy(alpha = 0.1f))
+                                            Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                                             SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
                                             SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
                                             SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
@@ -185,7 +182,7 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                     "Tus Activos",
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onBackground,
                                     modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
                                 )
                             }
@@ -216,18 +213,19 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             item {
                                 Card(
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
-                                    shape = RoundedCornerShape(16.dp)
+                                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                    shape = RoundedCornerShape(16.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                                 ) {
                                     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                        Text("Balance Total Actual", fontSize = 14.sp, color = DarkTextSecondary)
+                                        Text("Balance Total Actual", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                         Text(
                                             text = String.format(Locale.getDefault(), "$%,.2f", totalBalance),
                                             fontSize = 24.sp,
                                             fontWeight = FontWeight.Bold,
-                                            color = Color.White
+                                            color = MaterialTheme.colorScheme.onSurface
                                         )
-                                        Divider(color = Color.White.copy(alpha = 0.1f))
+                                        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                                             SummaryItem("Entradas", monthlyEntradas, Color(0xFF10B981))
                                             SummaryItem("Salidas", monthlySalidas, Color(0xFFEF4444))
@@ -240,11 +238,12 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             item {
                                 Card(
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
-                                    shape = RoundedCornerShape(16.dp)
+                                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                                    shape = RoundedCornerShape(16.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
                                 ) {
                                     Column(modifier = Modifier.padding(16.dp)) {
-                                        Text("Ingresos vs Gastos (3 Meses)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                                        Text("Ingresos vs Gastos (3 Meses)", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                                         Spacer(modifier = Modifier.height(16.dp))
                                         SimpleBarChart(data = last3MonthsData)
                                     }
@@ -266,10 +265,11 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
 
         Surface(
             modifier = Modifier.align(Alignment.BottomCenter).padding(24.dp),
-            color = DarkSurface.copy(alpha = 0.95f),
+            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
             shape = RoundedCornerShape(24.dp),
             tonalElevation = 8.dp,
-            shadowElevation = 12.dp
+            shadowElevation = 12.dp,
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
@@ -289,10 +289,11 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                         label = { Text(label) },
                         leadingIcon = { Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp)) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color(0xFF3B82F6),
-                            selectedLabelColor = Color.White,
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                            selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
                             containerColor = Color.Transparent,
-                            labelColor = DarkTextSecondary
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         border = null
                     )
@@ -382,7 +383,7 @@ fun SimpleBarChart(data: List<Triple<String, Double, Double>>) {
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(month, fontSize = 10.sp, color = DarkTextSecondary)
+                Text(month, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

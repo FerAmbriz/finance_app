@@ -17,9 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.theme.BorderColor
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 
 @Composable
 fun TransactionDialog(
@@ -50,10 +47,10 @@ fun TransactionDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = DarkSurface,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, BorderColor, RoundedCornerShape(20.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
         ) {
             Column(
                 modifier = Modifier.padding(24.dp),
@@ -63,7 +60,7 @@ fun TransactionDialog(
                     text = "Añadir Movimiento",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
@@ -71,17 +68,17 @@ fun TransactionDialog(
                         "Transfiere saldo de ${source.name} a otro activo." 
                         else "Registra un depósito o un retiro para ${source.name}.",
                     fontSize = 13.sp,
-                    color = DarkTextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 TabRow(
                     selectedTabIndex = selectedTab,
                     containerColor = Color.Transparent,
-                    contentColor = Color.White,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = Color(0xFF3B82F6)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     },
                     divider = {}
@@ -95,7 +92,7 @@ fun TransactionDialog(
                                     text = title,
                                     fontSize = 12.sp,
                                     fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (selectedTab == index) Color.White else DarkTextSecondary
+                                    color = if (selectedTab == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         )
@@ -111,26 +108,26 @@ fun TransactionDialog(
                             label = { Text("Activo Destino") },
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.White,
-                                unfocusedTextColor = if (destinationSource == null) DarkTextSecondary else Color.White,
-                                focusedBorderColor = Color(0xFF3B82F6),
-                                unfocusedBorderColor = BorderColor,
-                                focusedLabelColor = Color(0xFF3B82F6),
-                                unfocusedLabelColor = DarkTextSecondary
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = if (destinationSource == null) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                             ),
                             trailingIcon = {
-                                Text(text = "▼", color = DarkTextSecondary, modifier = Modifier.padding(end = 12.dp))
+                                Text(text = "▼", color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(end = 12.dp))
                             }
                         )
                         Box(modifier = Modifier.matchParentSize().clickable { destinationExpanded = true })
                         DropdownMenu(
                             expanded = destinationExpanded,
                             onDismissRequest = { destinationExpanded = false },
-                            modifier = Modifier.background(DarkSurface)
+                            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                         ) {
                             allSources.filter { it.id != source.id }.forEach { s ->
                                 DropdownMenuItem(
-                                    text = { Text(s.name, color = Color.White) }, 
+                                    text = { Text(s.name, color = MaterialTheme.colorScheme.onSurface) }, 
                                     onClick = { 
                                         destinationSource = s
                                         destinationExpanded = false 
@@ -148,12 +145,12 @@ fun TransactionDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -172,12 +169,12 @@ fun TransactionDialog(
                     label = { Text("Descripción (opcional)") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -191,7 +188,7 @@ fun TransactionDialog(
                         onClick = onDismiss,
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         ),
                         border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
                     ) {
@@ -214,8 +211,8 @@ fun TransactionDialog(
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF3B82F6),
-                            contentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         enabled = isEnabled
                     ) {

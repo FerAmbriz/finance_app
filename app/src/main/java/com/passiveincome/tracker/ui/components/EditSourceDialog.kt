@@ -21,9 +21,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.passiveincome.tracker.data.IncomeSource
 import com.passiveincome.tracker.ui.theme.AccentColors
-import com.passiveincome.tracker.ui.theme.BorderColor
-import com.passiveincome.tracker.ui.theme.DarkSurface
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -59,10 +56,10 @@ fun EditSourceDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = DarkSurface,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, BorderColor, RoundedCornerShape(20.dp))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(20.dp))
         ) {
             Column(
                 modifier = Modifier
@@ -74,12 +71,12 @@ fun EditSourceDialog(
                     text = "Editar Activo",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 // Color Selection
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Color:", color = DarkTextSecondary, fontSize = 14.sp)
+                    Text("Color:", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -94,7 +91,7 @@ fun EditSourceDialog(
                                     .background(color)
                                     .border(
                                         width = if (selectedColorHex == colorHex) 2.dp else 0.dp,
-                                        color = Color.White,
+                                        color = MaterialTheme.colorScheme.onSurface,
                                         shape = RoundedCornerShape(8.dp)
                                     )
                                     .clickable { selectedColorHex = colorHex }
@@ -109,11 +106,11 @@ fun EditSourceDialog(
                 val limit2 = limitAmount2Str.toDoubleOrNull() ?: 0.0
                 
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1E293B)),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
-                        Text("Distribución por Tasa", fontSize = 12.sp, color = DarkTextSecondary, fontWeight = FontWeight.Bold)
+                        Text("Distribución por Tasa", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         // Tier 1
@@ -141,12 +138,12 @@ fun EditSourceDialog(
                     label = { Text("Nombre") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -158,18 +155,18 @@ fun EditSourceDialog(
                         label = { Text("Tipo de Activo") },
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF3B82F6),
-                            unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF3B82F6),
-                            unfocusedLabelColor = DarkTextSecondary
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         trailingIcon = {
                             Text(
                                 text = "▼",
                                 modifier = Modifier.padding(end = 12.dp),
-                                color = DarkTextSecondary
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     )
@@ -182,11 +179,11 @@ fun EditSourceDialog(
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
-                        modifier = Modifier.background(DarkSurface)
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                     ) {
                         types.forEach { t ->
                             DropdownMenuItem(
-                                text = { Text(t, color = Color.White) },
+                                text = { Text(t, color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     type = t
                                     dropdownExpanded = false
@@ -203,12 +200,12 @@ fun EditSourceDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -219,12 +216,12 @@ fun EditSourceDialog(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White,
-                        focusedBorderColor = Color(0xFF3B82F6),
-                        unfocusedBorderColor = BorderColor,
-                        focusedLabelColor = Color(0xFF3B82F6),
-                        unfocusedLabelColor = DarkTextSecondary
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 )
 
@@ -236,9 +233,9 @@ fun EditSourceDialog(
                     Checkbox(
                         checked = hasLimit,
                         onCheckedChange = { hasLimit = it },
-                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
+                        colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary, uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant)
                     )
-                    Text("Tiene Límite de Saldo", color = Color.White, fontSize = 14.sp)
+                    Text("Tiene Límite de Saldo", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                 }
 
                 if (hasLimit) {
@@ -249,12 +246,12 @@ fun EditSourceDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF3B82F6),
-                            unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF3B82F6),
-                            unfocusedLabelColor = DarkTextSecondary
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
 
@@ -265,9 +262,9 @@ fun EditSourceDialog(
                         Checkbox(
                             checked = hasSecondaryRate,
                             onCheckedChange = { hasSecondaryRate = it },
-                            colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
+                            colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary, uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant)
                         )
-                        Text("Aplicar Segunda Tasa (al excedente)", color = Color.White, fontSize = 14.sp)
+                        Text("Aplicar Segunda Tasa (al excedente)", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                     }
 
                     if (hasSecondaryRate) {
@@ -278,12 +275,12 @@ fun EditSourceDialog(
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedTextColor = Color.White,
-                                unfocusedTextColor = Color.White,
-                                focusedBorderColor = Color(0xFF3B82F6),
-                                unfocusedBorderColor = BorderColor,
-                                focusedLabelColor = Color(0xFF3B82F6),
-                                unfocusedLabelColor = DarkTextSecondary
+                                focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         )
 
@@ -294,9 +291,9 @@ fun EditSourceDialog(
                             Checkbox(
                                 checked = hasTertiaryRate,
                                 onCheckedChange = { hasTertiaryRate = it },
-                                colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
+                                colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary, uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant)
                             )
-                            Text("Añadir Tercer Nivel (Tier 3)", color = Color.White, fontSize = 14.sp)
+                            Text("Añadir Tercer Nivel (Tier 3)", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                         }
 
                         if (hasTertiaryRate) {
@@ -307,12 +304,12 @@ fun EditSourceDialog(
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
-                                    focusedBorderColor = Color(0xFF3B82F6),
-                                    unfocusedBorderColor = BorderColor,
-                                    focusedLabelColor = Color(0xFF3B82F6),
-                                    unfocusedLabelColor = DarkTextSecondary
+                                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             )
                             OutlinedTextField(
@@ -322,12 +319,12 @@ fun EditSourceDialog(
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                                 modifier = Modifier.fillMaxWidth(),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
-                                    focusedBorderColor = Color(0xFF3B82F6),
-                                    unfocusedBorderColor = BorderColor,
-                                    focusedLabelColor = Color(0xFF3B82F6),
-                                    unfocusedLabelColor = DarkTextSecondary
+                                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             )
                         }
@@ -341,9 +338,9 @@ fun EditSourceDialog(
                     Checkbox(
                         checked = hasHardCap,
                         onCheckedChange = { hasHardCap = it },
-                        colors = CheckboxDefaults.colors(checkedColor = Color(0xFF3B82F6), uncheckedColor = DarkTextSecondary)
+                        colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary, uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant)
                     )
-                    Text("Límite Total de Depósito", color = Color.White, fontSize = 14.sp)
+                    Text("Límite Total de Depósito", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                 }
 
                 if (hasHardCap) {
@@ -354,12 +351,12 @@ fun EditSourceDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = Color(0xFF3B82F6),
-                            unfocusedBorderColor = BorderColor,
-                            focusedLabelColor = Color(0xFF3B82F6),
-                            unfocusedLabelColor = DarkTextSecondary
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     )
                 }
@@ -374,7 +371,7 @@ fun EditSourceDialog(
                         onClick = onDismiss,
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onSurface
                         ),
                         border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
                     ) {
@@ -414,8 +411,8 @@ fun EditSourceDialog(
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF3B82F6),
-                            contentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
                         Text("Actualizar", fontSize = 14.sp, fontWeight = FontWeight.Bold)
@@ -432,12 +429,12 @@ fun TierInfoRow(label: String, amount: Double) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, fontSize = 12.sp, color = Color.White)
+        Text(text = label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
         Text(
             text = String.format(Locale.getDefault(), "$%,.2f", amount),
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
-            color = if (amount > 0) Color(0xFF10B981) else DarkTextSecondary
+            color = if (amount > 0) Color(0xFF10B981) else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

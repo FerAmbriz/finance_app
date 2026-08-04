@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.passiveincome.tracker.data.IncomeSource
-import com.passiveincome.tracker.ui.theme.DarkTextSecondary
 import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -64,6 +63,8 @@ fun DonutChart(
     val sourceColors = remember(activeSources) {
         activeSources.map { it.colorHex.toColorOrDefault() }
     }
+
+    val trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
 
     Box(
         modifier = modifier,
@@ -122,7 +123,7 @@ fun DonutChart(
 
             // Pista sutil de fondo
             drawCircle(
-                color = Color.White.copy(alpha = 0.04f),
+                color = trackColor,
                 radius = middleRadius,
                 center = centerOffset,
                 style = Stroke(width = baseThicknessPx)
@@ -196,7 +197,7 @@ fun DonutChart(
                     text = source.name,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
-                    color = DarkTextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
@@ -216,11 +217,11 @@ fun DonutChart(
                     fontSize = 8.sp,
                     fontWeight = FontWeight.SemiBold,
                     letterSpacing = 1.sp,
-                    color = DarkTextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = String.format(Locale.getDefault(), "$%,.2f", total),
-                    fontSize = 13.sp,
+                    fontSize = 19.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryTextColor
                 )
