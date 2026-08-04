@@ -179,13 +179,20 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                             }
                             
                             item {
-                                Text(
-                                    "Tus Activos",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                    modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
-                                )
+                                Column {
+                                    Text(
+                                        "Tus Activos",
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                        modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
+                                    )
+                                    Divider(
+                                        thickness = 1.dp,
+                                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                }
                             }
 
                             items(sources, key = { it.id }) { source ->

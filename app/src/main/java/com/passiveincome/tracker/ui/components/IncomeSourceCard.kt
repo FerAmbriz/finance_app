@@ -47,10 +47,10 @@ fun IncomeSourceCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = sourceColor.copy(alpha = 0.05f) // Fondo pastel muy sutil para contraste
+            containerColor = sourceColor.copy(alpha = 0.15f) // Fondo con color más marcado
         ),
         shape = RoundedCornerShape(20.dp), // Esquinas más redondeadas
-        border = androidx.compose.foundation.BorderStroke(1.dp, sourceColor.copy(alpha = 0.2f)) // Borde del color de la fuente
+        border = androidx.compose.foundation.BorderStroke(1.dp, sourceColor.copy(alpha = 0f)) // Borde más marcado
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

@@ -43,7 +43,7 @@ fun String.toColorOrDefault(defaultColor: Color = Color.Gray): Color {
 fun DonutChart(
     sources: List<IncomeSource>,
     modifier: Modifier = Modifier,
-    thickness: Dp = 48.dp, // Banda mucho más ancha para un look moderno
+    thickness: Dp = 40.dp, // Banda mucho más ancha para un look moderno
     gapWidth: Dp = 0.dp
 ) {
     val total = remember(sources) { sources.sumOf { it.totalBalance } }
@@ -200,13 +200,13 @@ fun DonutChart(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = String.format(Locale.getDefault(), "$%,.2f", source.totalBalance),
+                    text = String.format(Locale.getDefault(), "$%,.0f", source.totalBalance),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = selectedColor
                 )
                 Text(
-                    text = String.format(Locale.getDefault(), "%.1f%%", if (total > 0) (source.totalBalance / total) * 100 else 0.0),
+                    text = String.format(Locale.getDefault(), "%.0f%%", if (total > 0) (source.totalBalance / total) * 100 else 0.0),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryTextColor.copy(alpha = 0.8f)
@@ -220,7 +220,7 @@ fun DonutChart(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = String.format(Locale.getDefault(), "$%,.2f", total),
+                    text = String.format(Locale.getDefault(), "$%,.0f", total),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryTextColor
