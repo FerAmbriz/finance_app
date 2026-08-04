@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.passiveincome.tracker.data.IncomeSource
 import com.passiveincome.tracker.ui.components.DonutChart
-import com.passiveincome.tracker.ui.components.MountainHero
+import com.passiveincome.tracker.ui.components.PastelSummaryCard
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.pointer.pointerInput
@@ -74,14 +74,6 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
-        MountainHero(
-            title = "Proyecciones",
-            subtitle = "Crecimiento estimado a futuro",
-            statusText = "Future Engine",
-            height = 220.dp,
-            titleFontSize = 36.sp
-        )
-
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -356,10 +348,10 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Donut Chart on the left
-                Box(modifier = Modifier.weight(0.6f)) {
+                // Donut Chart en columna 60%
+                Box(modifier = Modifier.weight(0.55f)) {
                     DonutChart(
                         sources = projectedSources,
                         modifier = Modifier
@@ -368,28 +360,29 @@ fun ProjectionScreen(sources: List<IncomeSource>) {
                     )
                 }
 
-                // Summary Card on the right
-                Card(
-                    modifier = Modifier.weight(0.4f),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+                // Tarjetas Pastel en columna 40% (Consistente con Dashboard)
+                Column(
+                    modifier = Modifier.weight(0.45f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Text(
-                            "Rendimientos",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                        SummaryItem("R. Diario", displayData.dailyYield, Color(0xFF10B981))
-                        SummaryItem("R. Mensual", displayData.dailyYield * 30, Color(0xFF10B981))
-                        SummaryItem("R. Anual", displayData.dailyYield * 365, Color(0xFF10B981))
-                    }
+                    PastelSummaryCard(
+                        title = "R. Diario",
+                        value = displayData.dailyYield,
+                        containerColor = Color(0xFFE0F2FE),
+                        contentColor = Color(0xFF0369A1)
+                    )
+                    PastelSummaryCard(
+                        title = "R. Mensual",
+                        value = displayData.dailyYield * 30,
+                        containerColor = Color(0xFFDCFCE7),
+                        contentColor = Color(0xFF15803D)
+                    )
+                    PastelSummaryCard(
+                        title = "R. Anual",
+                        value = displayData.dailyYield * 365,
+                        containerColor = Color(0xFFFEF9C3),
+                        contentColor = Color(0xFFA16207)
+                    )
                 }
             }
         }

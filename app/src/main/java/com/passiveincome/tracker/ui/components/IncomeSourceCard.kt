@@ -1,7 +1,6 @@
 package com.passiveincome.tracker.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,12 +45,12 @@ fun IncomeSourceCard(
 
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = sourceColor.copy(alpha = 0.05f) // Fondo pastel muy sutil para contraste
         ),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(20.dp), // Esquinas más redondeadas
+        border = androidx.compose.foundation.BorderStroke(1.dp, sourceColor.copy(alpha = 0.2f)) // Borde del color de la fuente
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

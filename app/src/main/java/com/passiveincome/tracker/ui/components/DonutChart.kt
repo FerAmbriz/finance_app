@@ -43,8 +43,8 @@ fun String.toColorOrDefault(defaultColor: Color = Color.Gray): Color {
 fun DonutChart(
     sources: List<IncomeSource>,
     modifier: Modifier = Modifier,
-    thickness: Dp = 28.dp,
-    gapWidth: Dp = 0.dp // 1. Cambiado a 0.dp para eliminar la separación
+    thickness: Dp = 48.dp, // Banda mucho más ancha para un look moderno
+    gapWidth: Dp = 0.dp
 ) {
     val total = remember(sources) { sources.sumOf { it.totalBalance } }
     var selectedSourceIndex by remember { mutableStateOf<Int?>(null) }
@@ -72,7 +72,7 @@ fun DonutChart(
     ) {
         Canvas(
             modifier = Modifier
-                .size(220.dp)
+                .size(200.dp) // Regresado a 200.dp para que encaje bien en el layout de 2 columnas
                 .pointerInput(activeSources, total) {
                     detectTapGestures { offset ->
                         if (total == 0.0) return@detectTapGestures
@@ -221,7 +221,7 @@ fun DonutChart(
                 )
                 Text(
                     text = String.format(Locale.getDefault(), "$%,.2f", total),
-                    fontSize = 19.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryTextColor
                 )

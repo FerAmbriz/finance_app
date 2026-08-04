@@ -139,10 +139,10 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                         .fillMaxWidth()
                                         .padding(vertical = 8.dp),
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    // Donut Chart on the left
-                                    Box(modifier = Modifier.weight(0.6f)) {
+                                    // Donut Chart en columna 60%
+                                    Box(modifier = Modifier.weight(0.55f)) {
                                         DonutChart(
                                             sources = sources,
                                             modifier = Modifier
@@ -151,28 +151,29 @@ fun DashboardScreen(viewModel: IncomeViewModel = viewModel()) {
                                         )
                                     }
 
-                                    // Summary Card on the right
-                                    Card(
-                                        modifier = Modifier.weight(0.4f),
-                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                                        shape = RoundedCornerShape(16.dp),
-                                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+                                    // Tarjetas Pastel en columna 40% (ahora en un stack vertical para mejor ajuste)
+                                    Column(
+                                        modifier = Modifier.weight(0.45f),
+                                        verticalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        Column(
-                                            modifier = Modifier.padding(16.dp),
-                                            verticalArrangement = Arrangement.spacedBy(12.dp)
-                                        ) {
-                                            Text(
-                                                "Rendimientos",
-                                                fontSize = 14.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = MaterialTheme.colorScheme.onSurface
-                                            )
-                                            Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
-                                            SummaryItem("R. Diario", dailyYield, Color(0xFF10B981))
-                                            SummaryItem("R. Mensual", dailyYield * 30, Color(0xFF10B981))
-                                            SummaryItem("R. Anual", dailyYield * 365, Color(0xFF10B981))
-                                        }
+                                        PastelSummaryCard(
+                                            title = "Diario",
+                                            value = dailyYield,
+                                            containerColor = Color(0xFFE0F2FE),
+                                            contentColor = Color(0xFF0369A1)
+                                        )
+                                        PastelSummaryCard(
+                                            title = "Mensual",
+                                            value = dailyYield * 30,
+                                            containerColor = Color(0xFFDCFCE7),
+                                            contentColor = Color(0xFF15803D)
+                                        )
+                                        PastelSummaryCard(
+                                            title = "Anual",
+                                            value = dailyYield * 365,
+                                            containerColor = Color(0xFFFEF9C3),
+                                            contentColor = Color(0xFFA16207)
+                                        )
                                     }
                                 }
                             }
